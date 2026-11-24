@@ -317,10 +317,10 @@ __PDF_SCRIPT__
   }
 
   function timeline(entries) {
-    return '<ol class="relative ml-3 border-l border-border pl-10 sm:ml-6 sm:pl-16" data-timeline>' +
-      '<span aria-hidden="true" data-timeline-line class="absolute -left-px top-0 h-full w-0.5 origin-top bg-gradient-to-b from-gold-light to-gold" style="transform:scaleY(0)"></span>' +
+    return '<ol class="tl" data-timeline>' +
+      '<span aria-hidden="true" data-timeline-line class="tl-line absolute -left-px top-0 h-full w-0.5 origin-top bg-gradient-to-b from-gold-light to-gold" style="transform:scaleY(0)"></span>' +
       entries.map(function (e) {
-        return '<li data-r class="relative pb-14 last:pb-0">' +
+        return '<li data-r class="tl-item relative pb-14 last:pb-0">' +
           '<span aria-hidden="true" data-tl-node class="tl-node absolute -left-[3.05rem] top-2 h-4 w-4 rounded-full border-2 border-gold bg-background sm:-left-[4.55rem]"></span>' +
           '<p class="font-display text-4xl font-extrabold text-brand sm:text-5xl">' + e.year + "</p>" +
           '<p class="mt-2 text-sm font-semibold uppercase tracking-wider text-gold-deep">' + esc(e.heading) + "</p>" +
@@ -368,9 +368,9 @@ __PDF_SCRIPT__
       sectionHeading({ tone: "dark", eyebrow: "Workforce", title: "A team of 300+ professionals", intro: DATA.workforceNote }) +
       '<div class="mt-16">' + statGrid(teamStats, true) + "</div>") + "</section>";
 
-    html += '<section class="relative overflow-hidden py-24 sm:py-36">' + container("grid gap-14 lg:grid-cols-12 lg:gap-20",
-      '<div class="lg:col-span-4 lg:sticky lg:top-32 lg:self-start">' + sectionHeading({ eyebrow: "Our journey", title: "Milestones", intro: "Founding year and completed projects, as recorded in our business profile." }) + "</div>" +
-      '<div class="lg:col-span-8">' + timeline(buildTimeline()) + "</div>") + "</section>";
+    html += '<section class="relative overflow-hidden py-24 sm:py-36">' + container("",
+      sectionHeading({ eyebrow: "Our journey", title: "Milestones", intro: "Founding year and completed projects, as recorded in our business profile.", align: "center" }) +
+      '<div class="mt-20">' + timeline(buildTimeline()) + "</div>") + "</section>";
     return html;
   }
 
