@@ -248,14 +248,14 @@ __PDF_SCRIPT__
       '<div class="layer hidden lg:block" style="--k:-30;--r:7;right:6%;top:20%"><div class="float-a" style="width:clamp(200px,24vw,400px);opacity:.8">' + frameArt() + "</div></div>" +
       '<div class="layer hidden lg:block" style="--k:20;--r:4;right:34%;bottom:20%"><div class="float-b" style="width:clamp(60px,6vw,100px);opacity:.7">' + squareArt() + "</div></div>" +
       '<div class="layer hidden md:block" style="--k:-8;--r:1;right:18%;top:0;bottom:0"><div class="h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent"></div></div></div>' +
-      container("relative z-[2] flex min-h-[100svh] flex-col justify-center pb-40 pt-36",
-        '<div class="max-w-4xl [text-shadow:0_2px_28px_rgb(0_0_0/0.45)]">' +
-        '<p data-r class="mb-7 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.26em] text-gold"><span class="h-px w-12 bg-gold" aria-hidden="true"></span>EPC Contractors · Since ' + company.founded + "</p>" +
+      container("relative z-[2] flex min-h-[100svh] flex-col items-center justify-center pb-40 pt-36 text-center sm:items-start sm:text-left",
+        '<div class="w-full max-w-4xl [text-shadow:0_2px_28px_rgb(0_0_0/0.45)]">' +
+        '<p data-r class="mb-7 flex items-center justify-center gap-3 text-xs font-semibold uppercase tracking-[0.26em] text-gold sm:justify-start"><span class="h-px w-12 bg-gold" aria-hidden="true"></span>EPC Contractors · Since ' + company.founded + "</p>" +
         '<h1 data-split class="text-[2.7rem] font-extrabold sm:text-7xl lg:text-[5.6rem]" style="line-height:1.03">Building dreams through <span class="text-gold">Construction</span></h1>' +
-        '<p data-r style="--d:.45s" class="mt-8 max-w-xl text-lg leading-relaxed text-white/85">Over 30 years delivering universities, hospitals, residential townships and institutional buildings for government and private clients across India.</p>' +
-        '<div data-r style="--d:.6s" class="mt-11 flex flex-wrap gap-4">' +
-        button({ href: "/projects", variant: "gold", children: "View our projects " + icon("arrow-right", "h-4 w-4") }) +
-        button({ href: "/contact", variant: "outline-light", children: "Get in touch" }) + "</div></div>") +
+        '<p data-r style="--d:.45s" class="mx-auto mt-8 max-w-xl text-lg leading-relaxed text-white/85 sm:mx-0">Over 30 years delivering universities, hospitals, residential townships and institutional buildings for government and private clients across India.</p>' +
+        '<div data-r style="--d:.6s" class="mx-auto mt-11 flex w-full max-w-xs flex-col gap-3 sm:mx-0 sm:max-w-none sm:flex-row sm:flex-wrap sm:gap-4">' +
+        button({ href: "/projects", variant: "gold", cls: "w-full sm:w-auto", children: "View our projects " + icon("arrow-right", "h-4 w-4") }) +
+        button({ href: "/contact", variant: "outline-light", cls: "w-full sm:w-auto", children: "Get in touch" }) + "</div></div>") +
       '<div class="absolute inset-x-0 bottom-24 z-[2] hidden sm:block" aria-hidden="true">' +
       container("flex items-center gap-5", '<span class="hero-count font-display text-sm font-bold tracking-widest text-white" data-hero-count data-n="01" data-t="0' + heroImages.length + '"></span>' +
         '<div class="flex gap-2" data-hero-dots>' + heroImages.map(function () { return '<span class="hero-dot"><i></i></span>'; }).join("") + "</div>") + "</div>" +
@@ -313,11 +313,11 @@ __PDF_SCRIPT__
 
     html += '<section class="mesh grain on-dark relative overflow-hidden py-24 text-white sm:py-32">' +
       '<div class="orb" style="left:50%;top:-10rem;width:40rem;height:24rem;margin-left:-20rem;background:rgba(217,185,94,.15)" aria-hidden="true"></div>' +
-      container("relative z-[2] flex flex-col items-start justify-between gap-10 lg:flex-row lg:items-center",
+      container("relative z-[2] flex flex-col items-center justify-between gap-10 text-center lg:flex-row lg:items-center lg:text-left",
       '<div class="max-w-2xl"><h2 data-split class="text-4xl font-extrabold sm:text-5xl">Planning a project? Let’s talk.</h2>' +
       '<p data-r style="--d:.3s" class="mt-5 text-lg text-white/80">Send us your requirement or tender enquiry and our team will respond.</p></div>' +
-      '<div data-r style="--d:.4s" class="flex flex-wrap gap-4">' + button({ href: "/contact", variant: "gold", children: "Contact us" }) +
-      (PROFILE_PDF_AVAILABLE ? button({ href: "#", variant: "outline-light", attrs: "data-download-profile", children: icon("download", "h-4 w-4") + " Company profile (PDF)" }) : "") +
+      '<div data-r style="--d:.4s" class="flex w-full max-w-xs flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4">' + button({ href: "/contact", variant: "gold", cls: "w-full sm:w-auto", children: "Contact us" }) +
+      (PROFILE_PDF_AVAILABLE ? button({ href: "#", variant: "outline-light", cls: "w-full sm:w-auto", attrs: "data-download-profile", children: icon("download", "h-4 w-4") + " Company profile (PDF)" }) : "") +
       "</div>") + "</section>";
     return html;
   }
@@ -437,9 +437,9 @@ __PDF_SCRIPT__
             '<h2 class="mt-1 text-xl font-bold text-brand-ink sm:text-2xl">' + esc(s.title) + "</h2>" +
             '<p class="mt-3 leading-relaxed text-muted-foreground">' + esc(s.summary) + "</p></div></article></li>";
         }).join("") + "</ol>") + "</section>" +
-      '<section class="mesh grain on-dark relative overflow-hidden py-20 text-white"><div class="gold-rule absolute inset-x-0 top-0"></div>' + container("relative z-[2] flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-center",
+      '<section class="mesh grain on-dark relative overflow-hidden py-20 text-white"><div class="gold-rule absolute inset-x-0 top-0"></div>' + container("relative z-[2] flex flex-col items-center justify-between gap-8 text-center sm:flex-row sm:items-center sm:text-left",
         '<h2 data-split class="max-w-xl text-3xl font-extrabold sm:text-4xl">See these services applied on real projects.</h2>' +
-        reveal("", button({ href: "/projects", variant: "gold", children: "View projects" }), 0.3)) + "</section>";
+        reveal("w-full max-w-xs sm:w-auto sm:max-w-none", button({ href: "/projects", variant: "gold", cls: "w-full sm:w-auto", children: "View projects" }), 0.3)) + "</section>";
   }
 
   function turnoverChart() {
@@ -1114,7 +1114,7 @@ __PDF_SCRIPT__
         '<div class="fl sm:col-span-2"><textarea id="message" name="message" rows="6" placeholder=" " class="' + FLD + '"></textarea><label for="message">Message <span aria-hidden="true">*</span></label>' + err.replace("%", "message") + "</div>" +
         '<div class="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>' +
         '<div class="sm:col-span-2"><div data-server-error></div>' +
-        '<button type="submit" class="btn-lux btn-primary" id="enquiry-submit" data-magnetic>Send enquiry</button></div></form>';
+        '<button type="submit" class="btn-lux btn-primary w-full sm:w-auto" id="enquiry-submit" data-magnetic>Send enquiry</button></div></form>';
 
       var form = $("#enquiry-form", host), submitBtn = $("#enquiry-submit", host);
       bindMagnetic(submitBtn);
