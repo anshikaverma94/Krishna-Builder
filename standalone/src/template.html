@@ -352,25 +352,55 @@ __PDF_SCRIPT__
       }).join("") + "</ol>";
   }
 
+  /* Roadmap ("How we deliver"): a winding gold road with numbered stops, drawn as it scrolls into view. */
+  function roadmap() {
+    var D = "M0,100 C50,100 50,40 100,40 C200,40 200,160 300,160 C400,160 400,40 500,40 C600,40 600,160 700,160 C800,160 800,40 900,40 C950,40 950,100 1000,100";
+    var xs = [100, 300, 500, 700, 900], ys = [20, 80, 20, 80, 20]; // node centres: x in 1000-unit space, y in %
+    var track = '<div class="rm-track relative hidden lg:block" aria-hidden="true">' +
+      '<svg viewBox="0 0 1000 200" preserveAspectRatio="none" class="absolute inset-0 h-full w-full overflow-visible">' +
+      '<path class="rm-base" d="' + D + '" fill="none" vector-effect="non-scaling-stroke"/>' +
+      '<path class="rm-path" d="' + D + '" pathLength="1" fill="none" vector-effect="non-scaling-stroke"/></svg>' +
+      vision.map(function (v, i) {
+        return '<span class="rm-conn" style="left:' + xs[i] / 10 + "%;top:" + ys[i] + '%"></span>' +
+          '<span class="rm-node" data-x="' + xs[i] + '" data-index="' + String(i + 1).padStart(2, "0") + '" style="left:' + xs[i] / 10 + "%;top:" + ys[i] + '%"></span>';
+      }).join("") + '<span class="rm-dot"></span></div>';
+    var list = '<ol class="rm-list relative grid gap-5 lg:grid-cols-5 lg:gap-0"><span class="rm-rail lg:hidden" aria-hidden="true"></span>' +
+      vision.map(function (v, i) {
+        var n = String(i + 1).padStart(2, "0");
+        return '<li class="rm-li relative pl-14 lg:px-2 lg:pl-2">' +
+          '<span class="rm-node rm-mnode lg:hidden" data-index="' + n + '" aria-hidden="true"></span>' +
+          '<div data-tilt="4" data-spot class="rm-card glass relative h-full overflow-hidden p-6 transition-colors hover:border-gold/70">' +
+          '<span class="num-out" style="font-size:2.8rem;right:1rem;top:.6rem" data-index="' + n + '" aria-hidden="true"></span>' +
+          '<span class="relative z-[1] block h-0.5 w-10 bg-gold" aria-hidden="true"></span>' +
+          '<p class="relative z-[1] mt-8 text-[15px] leading-relaxed text-white/90 lg:mt-7">' + esc(v) + "</p></div></li>";
+      }).join("") + "</ol>";
+    return '<div class="rm mt-16 lg:mt-20" data-roadmap>' + track + list + "</div>";
+  }
+
   function pageAbout() {
     var html = "";
     var teamStats = stats.filter(function (s) { return s.label !== "Years of experience"; });
     html += pageHero({ idx: "01", photo: "iiit-nagpur-campus", eyebrow: "About us", title: "Thirty years of building across India", intro: about.paragraphs[1] });
 
     html += '<section class="relative overflow-hidden py-24 sm:py-36">' + container("grid gap-12 lg:grid-cols-12 lg:gap-20",
-      '<div class="lg:col-span-5">' + sectionHeading({ eyebrow: "Our story", title: "Since 1996" }) + "</div>" +
+      '<div class="lg:col-span-5">' + sectionHeading({ eyebrow: "Our story", title: "Since 1996" }) +
+      // Placeholder image (logo + name) until a real company photo is supplied: replace this block with an <img>.
+      '<div class="relative mt-12 max-w-md" aria-hidden="true"><div class="absolute -bottom-4 -right-4 left-4 top-4 border border-gold"></div>' +
+      '<div data-r="img" class="mesh relative flex aspect-[4/3] flex-col items-center justify-center gap-5 overflow-hidden shadow-[0_40px_80px_-40px_rgba(20,8,31,0.7)]">' +
+      '<div class="absolute inset-0 opacity-[0.12]" style="background-image:linear-gradient(var(--gold) 1px,transparent 1px),linear-gradient(90deg,var(--gold) 1px,transparent 1px);background-size:56px 56px"></div>' +
+      '<div class="absolute -right-10 -top-10 h-44 w-44 border border-gold/40"></div><div class="absolute -bottom-12 -left-12 h-52 w-52 border border-gold/25"></div>' +
+      logoMark("light", "relative h-20 w-20 sm:h-24 sm:w-24") +
+      '<span class="relative font-display text-xl font-extrabold uppercase tracking-[0.18em] text-white sm:text-2xl">Krishna Builder</span>' +
+      '<span class="relative h-px w-16 bg-gold"></span></div></div></div>' +
       reveal("space-y-6 text-lg leading-relaxed text-foreground/85 sm:text-xl sm:leading-relaxed lg:col-span-7",
         "<p>" + esc(about.paragraphs[0]) + "</p><p>" + esc(about.paragraphs[2]) + "</p>")) + "</section>";
 
-    html += '<section class="relative overflow-hidden bg-muted py-24 sm:py-36">' + container("",
-      sectionHeading({ eyebrow: "Vision & strategy", title: "How we deliver" }) +
-      '<ul data-stagger class="mt-16 grid gap-5 md:grid-cols-2">' +
-      vision.map(function (v, i) {
-        return '<li class="' + (i === vision.length - 1 ? "md:col-span-2" : "") + '">' +
-          '<div data-tilt="3" class="card-lux relative flex h-full gap-5 overflow-hidden p-7 sm:p-9">' +
-          '<span class="num-out" data-index="' + String(i + 1).padStart(2, "0") + '" aria-hidden="true"></span>' +
-          icon("circle-check", "mt-1 h-6 w-6 shrink-0 text-gold-deep") + '<p class="relative z-[1] pr-14 text-foreground/90">' + esc(v) + "</p></div></li>";
-      }).join("") + "</ul>") + "</section>";
+    html += '<section class="mesh grain on-dark relative overflow-hidden py-24 text-white sm:py-36">' +
+      '<div class="gold-rule absolute inset-x-0 top-0"></div>' +
+      '<div class="orb" style="left:-10rem;top:10%;width:28rem;height:28rem;background:rgba(106,53,160,.35)" aria-hidden="true"></div>' +
+      '<div class="orb" style="right:-12rem;bottom:0;width:28rem;height:28rem;background:rgba(217,185,94,.12)" aria-hidden="true"></div>' +
+      container("relative z-[2]",
+        sectionHeading({ tone: "dark", eyebrow: "Vision & strategy", title: "How we deliver" }) + roadmap()) + "</section>";
 
     html += '<section class="relative overflow-hidden py-24 sm:py-36">' + container("",
       sectionHeading({ eyebrow: "Leadership", title: "Krishna Builder: Our Team", intro: DATA.teamIntro }) +
@@ -837,6 +867,62 @@ __PDF_SCRIPT__
       var id = setInterval(function () { index = (index + 1) % images.length; show(index, false); }, 6500);
       cleanups.push(function () { clearInterval(id); });
     }
+  }
+
+  function initRoadmap(root) {
+    var rm = $("[data-roadmap]", root);
+    if (!rm) return;
+    var path = $(".rm-path", rm), dot = $(".rm-dot", rm);
+    var nodes = $$(".rm-track .rm-node", rm), conns = $$(".rm-conn", rm), lis = $$(".rm-li", rm), mnodes = $$(".rm-mnode", rm);
+    var DRAW = 3.4, wide = window.matchMedia("(min-width: 1024px)").matches, total = 0;
+    try { total = path.getTotalLength(); } catch (e) {}
+
+    // each stop lights up exactly when the drawn road reaches it
+    nodes.forEach(function (n, i) {
+      var d = (i * 0.35).toFixed(2);
+      if (total) {
+        var x = parseFloat(n.dataset.x), lo = 0, hi = total;
+        for (var k = 0; k < 22; k++) { var mid = (lo + hi) / 2; if (path.getPointAtLength(mid).x < x) lo = mid; else hi = mid; }
+        d = ((lo / total) * DRAW).toFixed(2);
+      }
+      if (!wide) d = (i * 0.35).toFixed(2);
+      [n, conns[i], lis[i], mnodes[i]].forEach(function (el) { if (el) el.style.setProperty("--d", d + "s"); });
+    });
+    // hovering a step highlights its stop on the road
+    lis.forEach(function (li, i) {
+      li.addEventListener("pointerenter", function () { if (nodes[i]) nodes[i].classList.add("hot"); });
+      li.addEventListener("pointerleave", function () { if (nodes[i]) nodes[i].classList.remove("hot"); });
+    });
+
+    var raf = 0, running = false, start = 0, onScreen = false;
+    var canTravel = wide && total && dot && !reduceMotion();
+    function frame(now) {
+      if (!running) return;
+      if (!start) start = now;
+      var t = ((now - start) % 9000) / 9000, e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      var pt = path.getPointAtLength(e * total);
+      dot.style.left = pt.x / 10 + "%";
+      dot.style.top = pt.y / 2 + "%";
+      raf = requestAnimationFrame(frame);
+    }
+    function travel(on) {
+      if (!canTravel) return;
+      if (on && !running) { running = true; raf = requestAnimationFrame(frame); }
+      if (!on && running) { running = false; cancelAnimationFrame(raf); }
+    }
+    var travelReady = false, tmr;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        onScreen = en.isIntersecting;
+        if (en.isIntersecting && !rm.classList.contains("go")) {
+          rm.classList.add("go");
+          if (canTravel) tmr = setTimeout(function () { travelReady = true; rm.classList.add("travel"); travel(onScreen); }, DRAW * 1000 + 300);
+        }
+        if (travelReady) travel(onScreen);
+      });
+    }, { threshold: 0.25 });
+    io.observe(rm);
+    cleanups.push(function () { io.disconnect(); clearTimeout(tmr); running = false; cancelAnimationFrame(raf); });
   }
 
   /* ---------------------------- project browser ---------------------- */
@@ -1337,7 +1423,7 @@ __PDF_SCRIPT__
     onScrollFrame();
 
     initFx(main); initHero(main); initCountUp(main); initBars(main);
-    initTimeline(main); initBrowser(main); initForm(main);
+    initTimeline(main); initRoadmap(main); initBrowser(main); initForm(main);
   }
 
   // Page transitions: a gold-edged curtain sweeps up, the page swaps underneath, then it lifts away.
