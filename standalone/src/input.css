@@ -655,20 +655,6 @@ h4 {
 
 /* ============================== FOOTER ============================ */
 
-.wordmark::before {
-  content: "KRISHNA BUILDER";
-  display: block;
-  white-space: nowrap;
-  font-family: var(--font-display);
-  font-weight: 800;
-  line-height: 0.9;
-  padding-bottom: 0.3rem;
-  letter-spacing: -0.02em;
-  font-size: clamp(2rem, 8.9vw, 9.5rem);
-  color: rgba(255, 255, 255, 0.045);
-  -webkit-text-stroke: 1px rgba(217, 185, 94, 0.18);
-  user-select: none;
-}
 
 /* ========================= TIMELINE / CHART ======================= */
 
@@ -867,43 +853,6 @@ h4 {
   transition: transform 0.6s var(--ease-io);
 }
 
-.cur-dot,
-.cur-ring {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 95;
-  pointer-events: none;
-  opacity: 0;
-  border-radius: 999px;
-  transition: opacity 0.3s, width 0.35s var(--ease-out), height 0.35s var(--ease-out), margin 0.35s var(--ease-out), background 0.3s;
-}
-.cur-dot {
-  width: 6px;
-  height: 6px;
-  margin: -3px 0 0 -3px;
-  background: var(--gold);
-}
-.cur-ring {
-  width: 34px;
-  height: 34px;
-  margin: -17px 0 0 -17px;
-  border: 1px solid rgba(217, 185, 94, 0.85);
-}
-.cur-ring.hov {
-  width: 64px;
-  height: 64px;
-  margin: -32px 0 0 -32px;
-  background: rgba(217, 185, 94, 0.14);
-}
-.has-cursor .cur-dot,
-.has-cursor .cur-ring {
-  opacity: 1;
-}
-@media (hover: none), (pointer: coarse) {
-  .cur-dot, .cur-ring { display: none; }
-}
-
 .wa-pulse::before {
   content: "";
   position: absolute;
@@ -918,9 +867,49 @@ h4 {
   100% { transform: scale(1.7); opacity: 0; }
 }
 
+/* slow zoom on photo banners */
+.kb {
+  animation: kb 28s ease-in-out infinite alternate;
+}
+@keyframes kb {
+  from { transform: scale(1.02); }
+  to { transform: scale(1.1); }
+}
+
 .no-scrollbar {
   scrollbar-width: none;
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* ===================== enquiry popup ===================== */
+.enq {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(10, 6, 14, 0.7);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.enq.open {
+  opacity: 1;
+}
+.enq-card {
+  width: 100%;
+  max-width: 34rem;
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform: translateY(28px) scale(0.97);
+  transition: transform 0.55s var(--ease-out);
+}
+.enq.open .enq-card {
+  transform: none;
 }

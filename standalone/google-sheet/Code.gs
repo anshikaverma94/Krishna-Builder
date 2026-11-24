@@ -67,7 +67,7 @@ function clean_(d) {
   return {
     name: s(d.name, 100), email: s(d.email, 200), phone: s(d.phone, 20),
     organisation: s(d.organisation, 150), subject: s(d.subject, 40),
-    message: s(d.message, 3000), source: s(d.source, 60) || "Website enquiry form",
+    message: s(d.message, 3000), source: s(d.source, 140) || "Website enquiry form",
   };
 }
 

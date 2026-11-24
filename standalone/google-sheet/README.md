@@ -61,6 +61,10 @@ app with the enquiry filled in, so nothing is silently lost.
   Script. Rows added to the Sheet are not limited by this.
 - **If the form shows "Network error":** confirm the deployment's access is **Anyone**
   (not "Anyone with a Google account") and that the URL ends in `/exec`, not `/dev`.
+- **Two forms, one Sheet:** the Contact page form and the "Enquire about similar work" popup on
+  each project page both land in the same tab. The **Source** column tells them apart:
+  `Website enquiry form`, or `Enquiry popup: <project name>`. Popup rows also get the Subject
+  `Project enquiry`.
 - **Columns:** Timestamp · Name · Email · Phone · Organisation · Subject · Message · Source.
   Cells beginning with `=`, `+`, `-` or `@` are stored as plain text so nobody can inject a
   spreadsheet formula.
