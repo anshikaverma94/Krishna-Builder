@@ -672,15 +672,29 @@ h4 {
 
 /* ========================= TIMELINE / CHART ======================= */
 
-/* Milestones: one column with a left rail on phones/tablets; centred zig-zag from 1024px. */
+/* Milestones: one column with a left rail on phones/tablets; centred zig-zag of cards from 1024px. */
 .tl {
   position: relative;
   margin-left: 0.75rem;
   padding-left: 2.5rem;
   border-left: 1px solid var(--border);
 }
+.tl-line {
+  box-shadow: 0 0 14px rgba(217, 185, 94, 0.55);
+}
+/* connector from the card to the rail */
+.tl-card::before {
+  content: "";
+  position: absolute;
+  top: 1.7rem;
+  left: -2.5rem;
+  width: 2.5rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), rgba(217, 185, 94, 0.35));
+}
 @media (min-width: 640px) {
   .tl { margin-left: 1.5rem; padding-left: 4rem; }
+  .tl-card::before { left: -4rem; width: 4rem; }
 }
 @media (min-width: 1024px) {
   .tl { margin-left: 0; padding-left: 0; border-left: 0; }
@@ -695,13 +709,18 @@ h4 {
   }
   .tl-line { left: 50%; margin-left: -1px; }
   .tl-item { width: 50%; }
-  .tl-item:nth-of-type(odd) { padding-right: 4.5rem; text-align: right; }
+  .tl-item:nth-of-type(odd) { padding-right: 4.5rem; }
   .tl-item:nth-of-type(even) { margin-left: auto; padding-left: 4.5rem; }
-  .tl-item:nth-of-type(odd) .tl-node { left: auto; right: -0.5rem; }
-  .tl-item:nth-of-type(even) .tl-node { left: -0.5rem; }
+  .tl-item:nth-of-type(odd) .tl-card::before {
+    left: auto; right: -4.5rem; width: 4.5rem;
+    background: linear-gradient(270deg, var(--gold), rgba(217, 185, 94, 0.35));
+  }
+  .tl-item:nth-of-type(even) .tl-card::before { left: -4.5rem; width: 4.5rem; }
+  .tl-item:nth-of-type(odd) .tl-node { left: auto; right: -0.625rem; }
+  .tl-item:nth-of-type(even) .tl-node { left: -0.625rem; }
   /* entries slide in from their own side */
-  .js .tl-item:nth-of-type(odd)[data-r] { translate: -44px 0; }
-  .js .tl-item:nth-of-type(even)[data-r] { translate: 44px 0; }
+  .js .tl-item:nth-of-type(odd)[data-r] { translate: -56px 0; }
+  .js .tl-item:nth-of-type(even)[data-r] { translate: 56px 0; }
   .js .tl-item[data-r].in { translate: none; }
 }
 .tl-node {
@@ -709,8 +728,8 @@ h4 {
 }
 .tl-node.lit {
   background: var(--gold);
-  transform: scale(1.18);
-  box-shadow: 0 0 0 6px rgba(217, 185, 94, 0.22), 0 0 26px rgba(217, 185, 94, 0.7);
+  transform: scale(1.15);
+  box-shadow: 0 0 0 7px rgba(217, 185, 94, 0.22), 0 0 28px rgba(217, 185, 94, 0.75);
 }
 .bar {
   height: 0;

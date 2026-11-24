@@ -320,14 +320,17 @@ __PDF_SCRIPT__
     return '<ol class="tl" data-timeline>' +
       '<span aria-hidden="true" data-timeline-line class="tl-line absolute -left-px top-0 h-full w-0.5 origin-top bg-gradient-to-b from-gold-light to-gold" style="transform:scaleY(0)"></span>' +
       entries.map(function (e) {
-        return '<li data-r class="tl-item relative pb-14 last:pb-0">' +
-          '<span aria-hidden="true" data-tl-node class="tl-node absolute -left-[3.05rem] top-2 h-4 w-4 rounded-full border-2 border-gold bg-background sm:-left-[4.55rem]"></span>' +
-          '<p class="font-display text-4xl font-extrabold text-brand sm:text-5xl">' + e.year + "</p>" +
-          '<p class="mt-2 text-sm font-semibold uppercase tracking-wider text-gold-deep">' + esc(e.heading) + "</p>" +
-          '<ul class="mt-4 space-y-2 text-foreground/85">' +
+        return '<li data-r class="tl-item relative pb-12 last:pb-0 sm:pb-16">' +
+          '<span aria-hidden="true" data-tl-node class="tl-node absolute -left-[3.125rem] top-[1.15rem] h-5 w-5 rounded-full border-2 border-gold bg-background sm:-left-[4.625rem]"></span>' +
+          '<div data-tilt="3" class="tl-card card-lux relative p-7 sm:p-9">' +
+          '<div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-gold-deep via-gold to-gold-light" aria-hidden="true"></div>' +
+          '<p class="font-display text-5xl font-extrabold text-brand sm:text-6xl">' + e.year + "</p>" +
+          '<p class="mt-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-gold-deep"><span class="h-px w-8 bg-gold" aria-hidden="true"></span>' + esc(e.heading) + "</p>" +
+          '<ul class="mt-6 space-y-3.5 text-foreground/85">' +
           e.items.map(function (it) {
-            return "<li>" + (it.href ? '<a href="' + href(it.href) + '" class="underline-offset-4 transition-colors hover:text-brand hover:underline">' + esc(it.label) + "</a>" : esc(it.label)) + "</li>";
-          }).join("") + "</ul></li>";
+            return '<li class="flex gap-3.5"><span class="mt-[0.6rem] h-1.5 w-1.5 shrink-0 rotate-45 bg-gold" aria-hidden="true"></span><span>' +
+              (it.href ? '<a href="' + href(it.href) + '" class="underline-offset-4 transition-colors hover:text-brand hover:underline">' + esc(it.label) + "</a>" : esc(it.label)) + "</span></li>";
+          }).join("") + "</ul></div></li>";
       }).join("") + "</ol>";
   }
 
