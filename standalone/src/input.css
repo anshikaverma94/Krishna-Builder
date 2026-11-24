@@ -1,0 +1,174 @@
+@import "tailwindcss" source(none);
+@source "./template.html";
+
+/*
+  Krishna Builder design tokens — "architectural editorial".
+  Identical to src/app/globals.css of the Next.js app.
+  Purple + gold come from the company logo. Gold is for fills, rules and
+  large display text on purple only (gold on ivory/white fails WCAG AA text contrast).
+*/
+:root {
+  --background: #faf8f3;
+  --surface: #ffffff;
+  --foreground: #17151c;
+  --muted: #f1eee6;
+  --muted-foreground: #5e5a66;
+  --border: #e6e1d6;
+  --input: #85827a;
+
+  --brand: #4a2370;
+  --brand-ink: #2b1442;
+  --brand-foreground: #ffffff;
+  --gold: #d9b95e;
+  --gold-deep: #8a6d1f; /* gold readable as text on ivory (>= 4.5:1) */
+
+  --radius: 0.25rem;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --font-inter: "Inter";
+  --font-manrope: "Manrope";
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-manrope), system-ui, sans-serif;
+
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) * 2);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.on-dark :focus-visible {
+  outline-color: var(--gold);
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--brand-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Replacements for the `motion` library used by the React app.
+   ------------------------------------------------------------------ */
+
+/* Scroll reveal: fade up once, 400 ms (Reveal.tsx). */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0s),
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0s);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero slideshow: 1.2 s crossfade + slow 8 s zoom (HeroSlideshow.tsx). */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+.hero-slide.on {
+  opacity: 1;
+  transition: opacity 1.2s ease-out;
+}
+.hero-slide.leaving {
+  opacity: 0;
+  transition: opacity 1.2s ease-out;
+}
+.hero-zoom {
+  position: absolute;
+  inset: 0;
+  transform: scale(1);
+}
+.hero-slide.on .hero-zoom {
+  transform: scale(1.05);
+  transition: transform 8s linear;
+}
+.hero-slide.first .hero-zoom {
+  transition: none;
+}
+.hero-slide.leaving .hero-zoom {
+  transition: none;
+}
+
+/* Header blur lives on a pseudo-element so the fixed mobile menu is not
+   trapped inside a backdrop-filter containing block. */
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: color-mix(in oklab, var(--background) 95%, transparent);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+/* Mobile menu fade (Nav.tsx). */
+.menu-overlay {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.menu-overlay.open {
+  opacity: 1;
+}
+
+/* Turnover bars grow when scrolled into view (TurnoverChart.tsx). */
+.bar {
+  height: 0;
+  transition: height 0.8s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0s);
+}

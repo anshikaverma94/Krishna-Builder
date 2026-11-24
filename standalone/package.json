@@ -1,0 +1,12 @@
+{
+  "name": "krishna-builder-standalone",
+  "private": true,
+  "type": "module",
+  "description": "Builds a single self-contained krishna-builder.html (vanilla HTML/CSS/JS).",
+  "scripts": { "build": "node build.mjs" },
+  "devDependencies": {
+    "@tailwindcss/cli": "4.3.3",
+    "tailwindcss": "4.3.3",
+    "lucide-static": "1.78.0"
+  }
+}
