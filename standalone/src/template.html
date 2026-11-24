@@ -617,13 +617,13 @@ __PDF_SCRIPT__
     $("#header-logo").innerHTML = logo("light");
     $("#whatsapp-btn").href = "https://wa.me/" + company.whatsapp + "?text=" + encodeURIComponent("Hello Krishna Builder, I would like to make an enquiry.");
     $("#whatsapp-btn").innerHTML = icon("message-circle", "h-5 w-5") + '<span class="hidden sm:inline">WhatsApp</span>';
-    $("#site-footer").innerHTML = '<div class="gold-rule absolute inset-x-0 top-0"></div><div class="relative z-[2]">' + container("grid gap-12 py-20 md:grid-cols-12",
+    $("#site-footer").innerHTML = '<div class="gold-rule absolute inset-x-0 top-0"></div><div class="relative z-[2]">' + container("grid gap-9 py-12 md:grid-cols-12 md:gap-12 md:py-20",
       '<div class="md:col-span-5">' + logo("light") +
-      '<p class="mt-7 max-w-sm text-sm leading-relaxed">' + esc(company.nature) + ". Serving government and private clients across India since " + company.founded + ".</p></div>" +
-      '<nav aria-label="Footer" class="md:col-span-2"><h2 class="mb-5 text-xs font-semibold uppercase tracking-[0.24em] text-gold">Explore</h2><ul class="space-y-1">' +
+      '<p class="mt-5 max-w-sm text-sm leading-relaxed md:mt-7">' + esc(company.nature) + ". Serving government and private clients across India since " + company.founded + ".</p></div>" +
+      '<nav aria-label="Footer" class="md:col-span-2"><h2 class="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-gold md:mb-5">Explore</h2><ul class="grid grid-cols-2 gap-x-6 md:grid-cols-1 md:space-y-1">' +
       nav.map(function (item) { return '<li><a href="' + href(item.href) + '" class="inline-flex min-h-9 items-center text-sm transition-all duration-300 hover:translate-x-1 hover:text-gold">' + item.label + "</a></li>"; }).join("") + "</ul></nav>" +
-      '<div class="md:col-span-5"><h2 class="mb-5 text-xs font-semibold uppercase tracking-[0.24em] text-gold">Head office</h2>' +
-      '<address class="space-y-5 not-italic text-sm">' +
+      '<div class="md:col-span-5"><h2 class="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-gold md:mb-5">Head office</h2>' +
+      '<address class="space-y-4 not-italic text-sm md:space-y-5">' +
       '<p class="flex gap-3">' + icon("map-pin", "mt-0.5 h-4 w-4 shrink-0 text-gold") + "<span>" + esc(company.address.full) + "</span></p>" +
       '<p class="flex gap-3">' + icon("phone", "mt-0.5 h-4 w-4 shrink-0 text-gold") + '<span class="flex flex-col">' +
       company.phones.map(function (p) { return '<a href="tel:' + p.tel + '" class="transition-colors hover:text-gold">' + esc(p.label) + "</a>"; }).join("") + "</span></p>" +
