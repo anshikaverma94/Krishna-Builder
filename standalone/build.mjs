@@ -4,6 +4,7 @@
 //   npm install          (once - build-time tools only)
 //   node build.mjs       -> krishna-builder.html
 //   node build.mjs --no-pdf   skip embedding the 5 MB company-profile PDF
+//   ENQUIRY_ENDPOINT=<apps-script-url> node build.mjs   send the form to a Google Sheet (see google-sheet/README.md)
 //
 // What gets inlined:
 //   - CSS: src/input.css compiled by Tailwind (the same classes the React app uses)
@@ -21,7 +22,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "..");
 const noPdf = process.argv.includes("--no-pdf");
-const out = join(here, "krishna-builder.html");
+const out = process.env.OUT_FILE ? resolve(process.env.OUT_FILE) : join(here, "krishna-builder.html");
 const tmp = join(here, ".build");
 
 rmSync(tmp, { recursive: true, force: true });
@@ -140,7 +141,9 @@ const html = readFileSync(join(here, "src", "template.html"), "utf8")
   .replace("/*__CSS__*/", () => css)
   .replace("/*__JSONLD__*/", () => safeJson(jsonLd))
   .replace("__PDF_SCRIPT__", () => pdfScript)
-  .replace("/*__DATA__*/", () => dataJs);
+  .replace("/*__DATA__*/", () => dataJs)
+  // Optional Google Sheet (Apps Script web-app) URL:  ENQUIRY_ENDPOINT=https://script.google.com/.../exec node build.mjs
+  .replace('/*__ENDPOINT__*/""', () => JSON.stringify(process.env.ENQUIRY_ENDPOINT ?? ""));
 
 writeFileSync(out, html);
 rmSync(tmp, { recursive: true, force: true });

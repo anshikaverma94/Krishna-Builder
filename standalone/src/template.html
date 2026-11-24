@@ -2,32 +2,34 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Krishna Builder — EPC Contractors &amp; Developers, New Delhi</title>
 <meta name="description" content="Krishna Builder is an EPC contractor with 30+ years of experience delivering institutional, healthcare, residential and commercial projects across India.">
-<meta name="theme-color" content="#4a2370">
+<meta name="theme-color" content="#14081f">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Krishna Builder">
 <meta property="og:locale" content="en_IN">
 <meta property="og:title" content="Krishna Builder — EPC Contractors &amp; Developers, New Delhi">
 <link rel="icon" href="__FAVICON__">
+<script>document.documentElement.classList.add("js")</script>
 <style>/*__CSS__*/</style>
 <script type="application/ld+json">/*__JSONLD__*/</script>
 </head>
 <body class="flex min-h-screen flex-col">
-<a id="skip-link" href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-brand focus:px-4 focus:py-2 focus:text-white">Skip to content</a>
+<a id="skip-link" href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[110] focus:bg-brand focus:px-4 focus:py-2 focus:text-white">Skip to content</a>
+<div class="progress" id="progress" aria-hidden="true"></div>
 
-<header class="site-header sticky top-0 z-40 border-b border-border">
-  <div class="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12 flex h-18 items-center justify-between gap-6">
+<header class="hdr on-dark" id="hdr">
+  <div class="hdr-bar mx-auto flex w-full max-w-7xl items-center justify-between gap-6 px-5 sm:px-8 lg:px-12">
     <a href="#/" aria-label="Krishna Builder — home" class="shrink-0" id="header-logo"></a>
     <nav aria-label="Primary" class="hidden lg:block" id="desktop-nav"></nav>
     <div class="flex items-center gap-3">
-      <a href="#/contact" class="hidden min-h-10 items-center justify-center gap-2 rounded-sm bg-brand px-5 py-2 text-sm font-semibold tracking-wide text-white transition-colors duration-200 hover:bg-brand-ink lg:inline-flex">Enquire</a>
+      <div class="hidden lg:block"><a href="#/contact" class="btn-lux btn-gold btn-sm" data-magnetic>Enquire</a></div>
       <div class="lg:hidden">
-        <button type="button" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu" class="relative z-50 inline-flex h-11 w-11 items-center justify-center text-brand"></button>
-        <div id="mobile-menu" hidden class="menu-overlay on-dark fixed inset-0 z-40 flex flex-col bg-brand-ink px-6 pb-10 pt-24">
-          <nav aria-label="Mobile" id="mobile-nav"></nav>
-          <a href="#/contact" class="mt-8 inline-flex min-h-12 items-center justify-center rounded-sm bg-gold px-6 text-sm font-semibold text-brand-ink">Enquire now</a>
+        <button type="button" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu" class="relative z-50 inline-flex h-11 w-11 items-center justify-center text-white"></button>
+        <div id="mobile-menu" hidden class="menu-overlay mesh on-dark fixed inset-0 z-40 flex flex-col overflow-y-auto px-6 pb-10 pt-28">
+          <nav aria-label="Mobile" id="mobile-nav" class="relative z-[2]"></nav>
+          <a href="#/contact" class="m-item btn-lux btn-gold relative z-[2] mt-10" style="--i:7">Enquire now</a>
         </div>
       </div>
     </div>
@@ -36,9 +38,13 @@
 
 <main id="main" class="flex-1" tabindex="-1" style="outline:none"></main>
 
-<footer class="on-dark bg-brand-ink text-white/80" id="site-footer"></footer>
+<footer class="on-dark mesh grain relative overflow-hidden text-white/80" id="site-footer"></footer>
 
-<a id="whatsapp-btn" target="_blank" rel="noopener noreferrer" aria-label="Chat with Krishna Builder on WhatsApp" class="fixed bottom-5 right-5 z-30 inline-flex h-12 items-center gap-2 rounded-full bg-[#1b7a46] px-4 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105"></a>
+<a id="whatsapp-btn" target="_blank" rel="noopener noreferrer" aria-label="Chat with Krishna Builder on WhatsApp" class="wa-pulse fixed bottom-5 right-5 z-30 inline-flex h-12 items-center gap-2 rounded-full bg-[#1b7a46] px-4 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105"></a>
+
+<div class="curtain" id="curtain" aria-hidden="true"></div>
+<div class="cur-ring" id="cur-ring" aria-hidden="true"></div>
+<div class="cur-dot" id="cur-dot" aria-hidden="true"></div>
 
 <noscript><p style="padding:2rem;text-align:center">This website needs JavaScript enabled to display its content.</p></noscript>
 
@@ -52,19 +58,18 @@ __PDF_SCRIPT__
   /* ------------------------------------------------------------------
      Configuration
      ------------------------------------------------------------------
-     ENQUIRY_ENDPOINT: the original site POSTs enquiries to /api/enquiry
-     (a Next.js route that emails them through Resend). A single HTML file
-     has no server, so by default the form opens the visitor's email app with
-     the enquiry pre-filled. To send enquiries to a backend instead, set this
-     to its URL; it receives the same JSON body and answers { ok: true } or
-     { error: "..." } exactly like the original route.
+     ENQUIRY_ENDPOINT: URL of the Google Apps Script web app that appends
+     each enquiry to a Google Sheet (see google-sheet/README.md). Set it here,
+     or build with   ENQUIRY_ENDPOINT=https://script.google.com/.../exec node build.mjs
+     While it is empty the form falls back to opening the visitor's email app
+     with the enquiry pre-filled, so it never silently loses a message.
      ------------------------------------------------------------------ */
-  var ENQUIRY_ENDPOINT = "";
+  var ENQUIRY_ENDPOINT = /*__ENDPOINT__*/"";
 
-  var company = DATA.company, stats = DATA.stats, particulars = DATA.particulars;
+  var company = DATA.company, stats = DATA.stats;
   var about = DATA.about, vision = DATA.vision, leadership = DATA.leadership;
   var nav = DATA.nav, services = DATA.services, projects = DATA.projects;
-  var sectors = DATA.sectors, machinery = DATA.machinery, financials = DATA.financials;
+  var machinery = DATA.machinery, financials = DATA.financials;
   var clientNames = DATA.clientNames, clientStrip = DATA.clientStrip;
   var SITE_NAME = company.name;
 
@@ -77,7 +82,9 @@ __PDF_SCRIPT__
     });
   };
   var reduceMotion = function () { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; };
+  var FINE = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   var href = function (path) { return "#" + path; };
+  var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
 
   var inr = new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   var nfInt = new Intl.NumberFormat("en-IN");
@@ -98,7 +105,6 @@ __PDF_SCRIPT__
   }
 
   /* ------------------------------ logo ----------------------------- */
-  // Vector recreation of the Krishna Builder "KB" mark (gold frame + K).
   function logoMark(variant, cls) {
     var k = variant === "light" ? "#ffffff" : "#4a2370";
     return '<svg viewBox="0 0 100 100" class="' + (cls || "") + '" role="img" aria-label="Krishna Builder">' +
@@ -107,53 +113,55 @@ __PDF_SCRIPT__
   }
   function logo(variant) {
     var text = variant === "light" ? "text-white" : "text-brand";
-    return '<span class="inline-flex items-center gap-3 ">' + logoMark(variant, "h-10 w-10 shrink-0") +
+    return '<span class="inline-flex items-center gap-3">' + logoMark(variant, "h-10 w-10 shrink-0") +
       '<span class="font-display text-lg font-extrabold uppercase leading-none tracking-wide ' + text + '">Krishna Builder</span></span>';
+  }
+  // Decorative line-art of the logo frame, used for floating 3D layers.
+  function frameArt() {
+    return '<svg viewBox="0 0 100 100" fill="none" stroke="#d9b95e" stroke-width=".7" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M4 4h92v44H48v4h48v44H4z"/><path d="M12 12h76v32H44v12h44v32H12z" opacity=".45"/>' +
+      '<path d="M22 24h10v52H22zM32 50l32-26h14L40 54zM40 46l38 30H64L32 56z" fill="rgba(217,185,94,.08)"/></svg>';
+  }
+  function squareArt() {
+    return '<svg viewBox="0 0 100 100" fill="none" stroke="#d9b95e" stroke-width="1.2" aria-hidden="true"><rect x="8" y="8" width="84" height="84"/><rect x="26" y="26" width="48" height="48" opacity=".5"/></svg>';
   }
 
   /* ------------------------- layout primitives --------------------- */
   var container = function (cls, inner) {
     return '<div class="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12 ' + (cls || "") + '">' + inner + "</div>";
   };
-  var reveal = function (cls, inner, delay) {
-    return '<div class="reveal ' + (cls || "") + '" style="--d:' + (delay || 0) + 's">' + inner + "</div>";
+  var reveal = function (cls, inner, delay, kind) {
+    return '<div data-r' + (kind ? '="' + kind + '"' : "") + ' class="' + (cls || "") + '" style="--d:' + (delay || 0) + 's">' + inner + "</div>";
   };
 
   function sectionHeading(o) {
     var dark = o.tone === "dark", center = o.align === "center";
-    return reveal(center ? "mx-auto max-w-3xl text-center" : "max-w-3xl",
+    return '<div class="' + (center ? "mx-auto max-w-3xl text-center" : "max-w-3xl") + '">' +
       (o.eyebrow
-        ? '<p class="mb-4 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] ' + (dark ? "text-gold" : "text-gold-deep") + " " + (center ? "justify-center" : "") + '">' +
-          '<span class="h-px w-8 bg-gold" aria-hidden="true"></span>' + esc(o.eyebrow) + "</p>"
+        ? '<p data-r class="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.26em] ' + (dark ? "text-gold" : "text-gold-deep") + " " + (center ? "justify-center" : "") + '">' +
+          '<span class="h-px w-10 bg-gold" aria-hidden="true"></span>' + esc(o.eyebrow) + "</p>"
         : "") +
-      '<h2 class="text-3xl font-extrabold sm:text-4xl lg:text-5xl ' + (dark ? "text-white" : "text-brand-ink") + '">' + esc(o.title) + "</h2>" +
+      '<h2 data-split class="text-[2rem] font-extrabold sm:text-5xl lg:text-[3.5rem] ' + (dark ? "text-white" : "text-brand-ink") + '">' + esc(o.title) + "</h2>" +
       (o.intro
-        ? '<p class="mt-5 text-base leading-relaxed sm:text-lg ' + (dark ? "text-white/80" : "text-muted-foreground") + '">' + esc(o.intro) + "</p>"
-        : ""));
+        ? '<p data-r style="--d:.3s" class="mt-6 text-base leading-relaxed sm:text-lg ' + (dark ? "text-white/75" : "text-muted-foreground") + '">' + esc(o.intro) + "</p>"
+        : "") + "</div>";
   }
 
-  var BTN_BASE = "inline-flex min-h-11 items-center justify-center gap-2 rounded-sm px-6 py-3 text-sm font-semibold tracking-wide transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60";
-  var BTN = {
-    primary: "bg-brand text-white hover:bg-brand-ink",
-    gold: "bg-gold text-brand-ink hover:bg-[#e6c872]",
-    outline: "border border-brand text-brand hover:bg-brand hover:text-white",
-    "outline-light": "border border-white/70 text-white hover:bg-white hover:text-brand-ink"
-  };
+  var BTN = { primary: "btn-lux btn-primary", gold: "btn-lux btn-gold", outline: "btn-lux btn-outline", "outline-light": "btn-lux btn-outline-light" };
   function button(o) {
-    var cls = BTN_BASE + " " + BTN[o.variant || "primary"] + " " + (o.cls || "");
     var h = /^(https?:|tel:|mailto:|#)/.test(o.href) ? o.href : href(o.href);
-    return '<a href="' + esc(h) + '" class="' + cls + '" ' + (o.attrs || "") + ">" + o.children + "</a>";
+    return '<a href="' + esc(h) + '" class="' + BTN[o.variant || "primary"] + " " + (o.cls || "") + '" data-magnetic ' + (o.attrs || "") + ">" + o.children + "</a>";
   }
 
   /* ----------------------------- stat grid ------------------------- */
   function statGrid(list, showDescriptions) {
     var lgCols = { 3: "lg:grid-cols-3", 4: "lg:grid-cols-4", 5: "lg:grid-cols-5" };
-    return '<dl class="grid grid-cols-2 gap-px ' + (showDescriptions ? "sm:grid-cols-2" : "sm:grid-cols-3") + " " + (lgCols[list.length] || "lg:grid-cols-4") + '">' +
+    return '<dl data-stagger class="grid grid-cols-2 gap-3 sm:gap-4 ' + (showDescriptions ? "sm:grid-cols-2" : "sm:grid-cols-3") + " " + (lgCols[list.length] || "lg:grid-cols-4") + '">' +
       list.map(function (s) {
-        return '<div class="flex flex-col gap-2 px-5 py-8 bg-brand">' +
-          '<dd class="order-1 font-display text-4xl font-extrabold sm:text-5xl"><span class="text-gold" data-countup="' + s.value + '" data-suffix="' + esc(s.suffix) + '">' + s.value + esc(s.suffix) + "</span></dd>" +
+        return '<div data-tilt="5" class="tile flex flex-col gap-2 px-5 py-7 sm:px-7 sm:py-9">' +
+          '<dd class="order-1 font-display text-4xl font-extrabold sm:text-5xl"><span class="gold-grad" data-countup="' + s.value + '" data-suffix="' + esc(s.suffix) + '">' + s.value + esc(s.suffix) + "</span></dd>" +
           '<dt class="order-2 text-sm font-semibold text-white">' + esc(s.label) + "</dt>" +
-          (showDescriptions && s.description ? '<p class="order-3 text-sm leading-relaxed text-white/80">' + esc(s.description) + "</p>" : "") +
+          (showDescriptions && s.description ? '<p class="order-3 text-sm leading-relaxed text-white/75">' + esc(s.description) + "</p>" : "") +
           "</div>";
       }).join("") + "</dl>";
   }
@@ -172,18 +180,36 @@ __PDF_SCRIPT__
   function projectCard(p) {
     var year = p.completedOn ? "Completed " + yearOf(p.completedOn)
       : p.stipulatedCompletion ? "Due " + yearOf(p.stipulatedCompletion) : null;
-    return '<a href="' + href("/projects/" + p.slug) + '" class="group block h-full overflow-hidden rounded-sm border border-border bg-surface transition-colors hover:border-brand">' +
+    return '<a href="' + href("/projects/" + p.slug) + '" data-tilt="5" class="card-lux group flex h-full flex-col overflow-hidden rounded-sm">' +
       '<div class="relative aspect-[4/3] overflow-hidden bg-muted">' +
-      projectImage({ src: p.image, alt: p.shortTitle, label: p.sector, cls: "transition-transform duration-500 ease-out group-hover:scale-105" }) +
-      '<span class="absolute left-3 top-3 rounded-sm px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider ' + (p.status === "ongoing" ? "bg-gold text-brand-ink" : "bg-white text-brand-ink") + '">' + p.status + "</span></div>" +
-      '<div class="p-5">' +
-      '<p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-gold-deep">' + esc(p.sector) + "</p>" +
-      '<h3 class="mt-2 text-lg font-bold leading-snug text-brand-ink group-hover:text-brand">' + esc(p.shortTitle) + "</h3>" +
+      projectImage({ src: p.image, alt: p.shortTitle, label: p.sector, cls: "transition-transform duration-[1200ms] ease-out group-hover:scale-110" }) +
+      '<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-ink/55 via-transparent to-transparent" aria-hidden="true"></div>' +
+      '<span class="absolute left-4 top-4 rounded-sm px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider ' + (p.status === "ongoing" ? "bg-gold text-brand-ink" : "bg-white text-brand-ink") + '">' + p.status + "</span></div>" +
+      '<div class="flex flex-1 flex-col p-6">' +
+      '<p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-deep">' + esc(p.sector) + "</p>" +
+      '<h3 class="mt-3 text-xl font-bold leading-snug text-brand-ink transition-colors group-hover:text-brand">' + esc(p.shortTitle) + "</h3>" +
       '<p class="mt-3 flex items-center gap-1.5 text-sm text-muted-foreground">' + icon("map-pin", "h-3.5 w-3.5 shrink-0") + esc(p.location) + "</p>" +
-      '<div class="mt-4 flex items-center justify-between border-t border-border pt-4 text-sm">' +
+      '<div class="mt-auto pt-5"><div class="flex items-center justify-between gap-3 border-t border-border pt-5 text-sm">' +
       '<span class="text-muted-foreground">' + (year || "") + "</span>" +
-      '<span class="inline-flex min-h-9 items-center gap-1.5 rounded-sm bg-brand px-4 text-sm font-semibold tracking-wide text-white transition-colors duration-200 group-hover:bg-brand-ink">View details ' + icon("arrow-right", "h-4 w-4") + "</span>" +
-      "</div></div></a>";
+      '<span class="chip-btn">View details ' + icon("arrow-right", "h-4 w-4") + "</span>" +
+      "</div></div></div></a>";
+  }
+
+  /* inner-page banner ------------------------------------------------ */
+  function deco() {
+    return '<div class="hero3d" aria-hidden="true" data-hero3d>' +
+      '<div class="orb" style="right:-9rem;top:-7rem;width:32rem;height:32rem;background:rgba(106,53,160,.42)"></div>' +
+      '<div class="orb" style="left:-10rem;bottom:-12rem;width:26rem;height:26rem;background:rgba(217,185,94,.13)"></div>' +
+      '<div class="layer hidden md:block" style="--k:-24;--r:5;right:9%;top:24%"><div class="float-a" style="width:clamp(130px,15vw,250px);opacity:.75">' + frameArt() + "</div></div>" +
+      '<div class="layer hidden md:block" style="--k:18;--r:3;right:34%;bottom:9%"><div class="float-b" style="width:clamp(54px,5vw,90px);opacity:.6">' + squareArt() + "</div></div></div>";
+  }
+  function pageHero(o) {
+    return '<section class="mesh grain on-dark relative isolate overflow-hidden text-white">' + deco() +
+      container("relative z-[2] pb-20 pt-40 sm:pb-28 sm:pt-52",
+        '<div class="hero-index" data-index="' + o.idx + '" aria-hidden="true"></div>' +
+        '<div class="relative">' + sectionHeading({ tone: "dark", eyebrow: o.eyebrow, title: o.title, intro: o.intro }) + "</div>" +
+        (o.extra ? '<div class="relative mt-14">' + o.extra + "</div>" : "")) +
+      '<div class="gold-rule absolute inset-x-0 bottom-0 z-[2]"></div></section>';
   }
 
   /* ============================== PAGES ============================ */
@@ -191,66 +217,88 @@ __PDF_SCRIPT__
   var PROFILE_PDF_AVAILABLE = !!document.getElementById("profile-pdf-b64");
   var HERO_SLUGS = ["iim-nagpur-phase-2-3", "ravindra-bhawan-goa", "nit-delhi-admin-block", "science-academy-jajpur", "iiit-nagpur-campus"];
 
-  function pageHome() {
-    var heroImages = HERO_SLUGS.map(function (slug) {
+  function heroImageList() {
+    return HERO_SLUGS.map(function (slug) {
       var src = getProjectImages(slug)[0], p = getProject(slug);
       return src && p ? { src: src, alt: p.shortTitle } : null;
     }).filter(Boolean);
+  }
+
+  function pageHome() {
+    var heroImages = heroImageList();
     var heroBg = heroImages.length
       ? '<div class="absolute inset-0 overflow-hidden bg-brand-ink" data-hero id="hero-slides">' +
-        '<div class="absolute inset-0 bg-gradient-to-r from-brand-ink/60 via-brand-ink/15 to-transparent lg:via-transparent" data-hero-overlay aria-hidden="true"></div></div>'
-      : '<div class="absolute inset-0 overflow-hidden bg-brand-ink" aria-hidden="true">' +
-        '<div class="absolute inset-0 opacity-[0.18]" style="background-image:linear-gradient(var(--gold) 1px, transparent 1px),linear-gradient(90deg, var(--gold) 1px, transparent 1px);background-size:72px 72px"></div>' +
-        '<div class="absolute -right-24 top-0 h-full w-1/2 -skew-x-12 bg-brand"></div>' +
-        '<div class="absolute -right-8 top-0 h-full w-24 -skew-x-12 bg-gold"></div></div>';
+        '<div class="absolute inset-0 bg-gradient-to-r from-brand-ink/85 via-brand-ink/35 to-brand-ink/5" data-hero-overlay aria-hidden="true"></div>' +
+        '<div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-brand-ink/80 to-transparent" aria-hidden="true"></div>' +
+        '<div class="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-brand-ink/70 to-transparent" aria-hidden="true"></div></div>'
+      : '<div class="mesh absolute inset-0 overflow-hidden" aria-hidden="true"></div>';
+    var aboutPhoto = getProjectImages("nit-delhi-admin-block")[0];
 
     var html = "";
     html += '<section class="on-dark relative isolate overflow-hidden text-white">' + heroBg +
-      container("relative flex min-h-[82vh] flex-col justify-center py-24",
-        reveal("max-w-3xl [text-shadow:0_2px_16px_rgb(0_0_0/0.55)]",
-          '<p class="mb-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-gold"><span class="h-px w-10 bg-gold" aria-hidden="true"></span>EPC Contractors · Since ' + company.founded + "</p>" +
-          '<h1 class="text-5xl font-extrabold leading-[1.05] sm:text-6xl lg:text-7xl">Building dreams through <span class="text-gold">Construction</span></h1>' +
-          '<p class="mt-6 max-w-xl text-lg text-white/85">Over 30 years delivering universities, hospitals, residential townships and institutional buildings for government and private clients across India.</p>' +
-          '<div class="mt-10 flex flex-wrap gap-4">' +
-          button({ href: "/projects", variant: "gold", children: "View our projects " + icon("arrow-right", "h-4 w-4") }) +
-          button({ href: "/contact", variant: "outline-light", children: "Get in touch" }) + "</div>")) +
+      '<div class="hero3d" aria-hidden="true" data-hero3d>' +
+      '<div class="layer hidden lg:block" style="--k:-30;--r:7;right:6%;top:20%"><div class="float-a" style="width:clamp(200px,24vw,400px);opacity:.8">' + frameArt() + "</div></div>" +
+      '<div class="layer hidden lg:block" style="--k:20;--r:4;right:34%;bottom:20%"><div class="float-b" style="width:clamp(60px,6vw,100px);opacity:.7">' + squareArt() + "</div></div>" +
+      '<div class="layer hidden md:block" style="--k:-8;--r:1;right:18%;top:0;bottom:0"><div class="h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent"></div></div></div>' +
+      container("relative z-[2] flex min-h-[100svh] flex-col justify-center pb-40 pt-36",
+        '<div class="max-w-4xl [text-shadow:0_2px_28px_rgb(0_0_0/0.45)]">' +
+        '<p data-r class="mb-7 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.26em] text-gold"><span class="h-px w-12 bg-gold" aria-hidden="true"></span>EPC Contractors · Since ' + company.founded + "</p>" +
+        '<h1 data-split class="text-[2.7rem] font-extrabold sm:text-7xl lg:text-[5.6rem]" style="line-height:1.03">Building dreams through <span class="text-gold">Construction</span></h1>' +
+        '<p data-r style="--d:.45s" class="mt-8 max-w-xl text-lg leading-relaxed text-white/85">Over 30 years delivering universities, hospitals, residential townships and institutional buildings for government and private clients across India.</p>' +
+        '<div data-r style="--d:.6s" class="mt-11 flex flex-wrap gap-4">' +
+        button({ href: "/projects", variant: "gold", children: "View our projects " + icon("arrow-right", "h-4 w-4") }) +
+        button({ href: "/contact", variant: "outline-light", children: "Get in touch" }) + "</div></div>") +
+      '<div class="absolute inset-x-0 bottom-24 z-[2] hidden sm:block" aria-hidden="true">' +
+      container("flex items-center gap-5", '<span class="hero-count font-display text-sm font-bold tracking-widest text-white" data-hero-count data-n="01" data-t="0' + heroImages.length + '"></span>' +
+        '<div class="flex gap-2" data-hero-dots>' + heroImages.map(function () { return '<span class="hero-dot"><i></i></span>'; }).join("") + "</div>") + "</div>" +
+      '<div class="scroll-cue z-[2]" aria-hidden="true"></div>' +
       "</section>";
 
-    html += '<section aria-label="Krishna Builder at a glance" class="bg-brand-ink">' + container("", statGrid(stats, false)) + "</section>";
+    html += '<section aria-label="Krishna Builder at a glance" class="relative z-20 -mt-20 sm:-mt-24">' + container("", statGrid(stats, false)) + "</section>";
 
-    html += '<section class="py-20 sm:py-28">' + container("grid gap-12 lg:grid-cols-12",
-      '<div class="lg:col-span-5">' + sectionHeading({ eyebrow: "Who we are", title: "A premier contractor, trusted since 1996" }) + "</div>" +
-      reveal("lg:col-span-7",
-        '<p class="text-lg leading-relaxed text-foreground/85">' + esc(about.paragraphs[1]) + "</p>" +
-        '<p class="mt-5 leading-relaxed text-muted-foreground">' + esc(about.paragraphs[0]) + "</p>" +
-        '<a href="#/about" class="mt-8 inline-flex min-h-11 items-center gap-2 font-semibold text-brand hover:text-brand-ink">About Krishna Builder ' + icon("arrow-right", "h-4 w-4") + "</a>")) +
-      "</section>";
+    html += '<section class="relative overflow-hidden py-24 sm:py-36">' + container("grid gap-14 lg:grid-cols-12 lg:gap-20",
+      '<div class="lg:col-span-5">' + sectionHeading({ eyebrow: "Who we are", title: "A premier contractor, trusted since 1996" }) +
+      (aboutPhoto ? '<div class="relative mt-12 hidden max-w-md lg:block"><div class="absolute -bottom-5 -right-5 h-full w-full border border-gold" aria-hidden="true"></div>' +
+        '<div data-r="img" class="relative aspect-[4/5] overflow-hidden"><img src="' + aboutPhoto + '" alt="" aria-hidden="true" loading="lazy" decoding="async" class="h-full w-full object-cover"></div></div>' : "") + "</div>" +
+      reveal("lg:col-span-7 lg:pt-3",
+        '<p class="text-xl leading-relaxed text-foreground/90 sm:text-2xl sm:leading-relaxed">' + esc(about.paragraphs[1]) + "</p>" +
+        '<p class="mt-7 text-base leading-relaxed text-muted-foreground sm:text-lg">' + esc(about.paragraphs[0]) + "</p>" +
+        '<a href="#/about" class="group mt-10 inline-flex min-h-11 items-center gap-3 text-sm font-bold uppercase tracking-[0.16em] text-brand hover:text-brand-ink">About Krishna Builder <span class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand transition-all duration-500 group-hover:translate-x-1 group-hover:bg-brand group-hover:text-white">' + icon("arrow-right", "h-4 w-4") + "</span></a>")) +
+      '<div class="orb" style="right:-12rem;top:20%;width:28rem;height:28rem;background:rgba(217,185,94,.12)" aria-hidden="true"></div></section>';
 
-    html += '<section class="bg-muted py-20 sm:py-28">' + container("",
-      sectionHeading({ eyebrow: "What we do", title: "Eight operations, one accountable contractor", intro: "From design and civil works to electrical, interiors and project management, delivered on an efficient EPC basis." }) +
-      '<ul class="mt-14 grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">' +
+    html += '<section class="mesh grain on-dark relative overflow-hidden py-24 text-white sm:py-36">' +
+      '<div class="gold-rule absolute inset-x-0 top-0"></div>' + container("relative z-[2]",
+      sectionHeading({ tone: "dark", eyebrow: "What we do", title: "Eight operations, one accountable contractor", intro: "From design and civil works to electrical, interiors and project management, delivered on an efficient EPC basis." }) +
+      '<ul data-stagger class="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">' +
       services.map(function (s, i) {
-        return '<li class="bg-surface">' + reveal("h-full",
-          '<a href="#/services" class="group flex h-full flex-col gap-4 p-7 transition-colors hover:bg-brand">' +
-          icon(s.icon, "h-7 w-7 text-brand group-hover:text-gold") +
-          '<h3 class="text-lg font-bold text-brand-ink group-hover:text-white">' + esc(s.title) + "</h3></a>", (i % 4) * 0.06) + "</li>";
+        return "<li>" +
+          '<a href="#/services" data-tilt="6" data-spot class="glass group relative flex h-full min-h-[15rem] flex-col justify-between gap-8 overflow-hidden p-7 transition-colors hover:border-gold/70">' +
+          '<span class="num-out" data-index="' + String(i + 1).padStart(2, "0") + '" aria-hidden="true"></span>' +
+          '<span class="depth relative z-[1] flex h-14 w-14 items-center justify-center rounded-full border border-gold/50 bg-gold/10 text-gold transition-all duration-500 group-hover:bg-gold group-hover:text-brand-ink">' + icon(s.icon, "h-7 w-7") + "</span>" +
+          '<h3 class="relative z-[1] text-lg font-bold leading-snug text-white">' + esc(s.title) + "</h3></a></li>";
       }).join("") + "</ul>") + "</section>";
 
-    html += '<section class="py-20 sm:py-28">' + container("",
+    html += '<section class="relative overflow-hidden py-24 sm:py-36">' + container("",
       '<div class="flex flex-wrap items-end justify-between gap-6">' + sectionHeading({ eyebrow: "Selected work", title: "Featured projects" }) +
-      '<a href="#/projects" class="inline-flex min-h-11 items-center gap-2 font-semibold text-brand hover:text-brand-ink">All ' + projects.length + " projects " + icon("arrow-right", "h-4 w-4") + "</a></div>" +
-      '<ul class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">' +
-      projects.filter(function (p) { return p.featured; }).map(function (p) { return "<li>" + projectCard(withCover(p)) + "</li>"; }).join("") + "</ul>") + "</section>";
+      '<a href="#/projects" class="group inline-flex min-h-11 items-center gap-3 text-sm font-bold uppercase tracking-[0.16em] text-brand hover:text-brand-ink">All ' + projects.length + " projects " +
+      '<span class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand transition-all duration-500 group-hover:translate-x-1 group-hover:bg-brand group-hover:text-white">' + icon("arrow-right", "h-4 w-4") + "</span></a></div>") +
+      '<div class="mx-auto mt-14 w-full max-w-7xl sm:px-8 lg:px-12">' +
+      '<ul data-stagger class="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-6 sm:grid sm:grid-cols-2 sm:gap-7 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">' +
+      projects.filter(function (p) { return p.featured; }).map(function (p) { return '<li class="w-[84%] shrink-0 snap-center sm:w-auto">' + projectCard(withCover(p)) + "</li>"; }).join("") + "</ul></div></section>";
 
-    html += '<section class="border-y border-border bg-surface py-14">' + container("",
-      '<p class="text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Trusted by government departments and institutions</p>' +
-      '<ul class="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-5">' +
-      clientStrip.map(function (c) { return '<li class="font-display text-xl font-extrabold text-brand/70">' + esc(c) + "</li>"; }).join("") + "</ul>") + "</section>";
+    var clientItems = clientStrip.map(function (c) { return '<li class="font-display text-2xl font-extrabold text-white/65 transition-colors hover:text-gold sm:text-3xl">' + esc(c) + "</li>"; }).join("");
+    html += '<section class="on-dark relative overflow-hidden bg-brand-ink py-16 sm:py-20"><div class="gold-rule absolute inset-x-0 top-0"></div>' + container("",
+      '<p data-r class="text-center text-xs font-semibold uppercase tracking-[0.26em] text-gold">Trusted by government departments and institutions</p>') +
+      '<div class="mq mt-10"><div class="mq-track">' +
+      '<ul class="flex shrink-0 items-center gap-16 pr-16">' + clientItems + "</ul>" +
+      '<ul class="mq-clone flex shrink-0 items-center gap-16 pr-16" aria-hidden="true">' + clientItems + "</ul></div></div></section>";
 
-    html += '<section class="on-dark bg-brand py-20 text-white">' + container("flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center",
-      '<div class="max-w-2xl"><h2 class="text-3xl font-extrabold sm:text-4xl">Planning a project? Let’s talk.</h2>' +
-      '<p class="mt-4 text-white/85">Send us your requirement or tender enquiry and our team will respond.</p></div>' +
-      '<div class="flex flex-wrap gap-4">' + button({ href: "/contact", variant: "gold", children: "Contact us" }) +
+    html += '<section class="mesh grain on-dark relative overflow-hidden py-24 text-white sm:py-32">' +
+      '<div class="orb" style="left:50%;top:-10rem;width:40rem;height:24rem;margin-left:-20rem;background:rgba(217,185,94,.15)" aria-hidden="true"></div>' +
+      container("relative z-[2] flex flex-col items-start justify-between gap-10 lg:flex-row lg:items-center",
+      '<div class="max-w-2xl"><h2 data-split class="text-4xl font-extrabold sm:text-5xl">Planning a project? Let’s talk.</h2>' +
+      '<p data-r style="--d:.3s" class="mt-5 text-lg text-white/80">Send us your requirement or tender enquiry and our team will respond.</p></div>' +
+      '<div data-r style="--d:.4s" class="flex flex-wrap gap-4">' + button({ href: "/contact", variant: "gold", children: "Contact us" }) +
       (PROFILE_PDF_AVAILABLE ? button({ href: "#", variant: "outline-light", attrs: "data-download-profile", children: icon("download", "h-4 w-4") + " Company profile (PDF)" }) : "") +
       "</div>") + "</section>";
     return html;
@@ -269,16 +317,16 @@ __PDF_SCRIPT__
   }
 
   function timeline(entries) {
-    return '<ol class="relative ml-3 border-l border-border pl-10 sm:ml-6 sm:pl-14" data-timeline>' +
-      '<span aria-hidden="true" data-timeline-line class="absolute -left-px top-0 h-full w-0.5 origin-top bg-gold" style="transform:scaleY(0)"></span>' +
+    return '<ol class="relative ml-3 border-l border-border pl-10 sm:ml-6 sm:pl-16" data-timeline>' +
+      '<span aria-hidden="true" data-timeline-line class="absolute -left-px top-0 h-full w-0.5 origin-top bg-gradient-to-b from-gold-light to-gold" style="transform:scaleY(0)"></span>' +
       entries.map(function (e) {
-        return '<li class="relative pb-12 last:pb-0">' +
-          '<span aria-hidden="true" class="absolute -left-[3.05rem] top-1.5 h-4 w-4 rounded-full border-2 border-gold bg-background sm:-left-[4.05rem]"></span>' +
-          '<p class="font-display text-3xl font-extrabold text-brand">' + e.year + "</p>" +
-          '<p class="mt-1 text-sm font-semibold uppercase tracking-wider text-gold-deep">' + esc(e.heading) + "</p>" +
-          '<ul class="mt-3 space-y-1.5 text-foreground/85">' +
+        return '<li data-r class="relative pb-14 last:pb-0">' +
+          '<span aria-hidden="true" data-tl-node class="tl-node absolute -left-[3.05rem] top-2 h-4 w-4 rounded-full border-2 border-gold bg-background sm:-left-[4.55rem]"></span>' +
+          '<p class="font-display text-4xl font-extrabold text-brand sm:text-5xl">' + e.year + "</p>" +
+          '<p class="mt-2 text-sm font-semibold uppercase tracking-wider text-gold-deep">' + esc(e.heading) + "</p>" +
+          '<ul class="mt-4 space-y-2 text-foreground/85">' +
           e.items.map(function (it) {
-            return "<li>" + (it.href ? '<a href="' + href(it.href) + '" class="underline-offset-4 hover:text-brand hover:underline">' + esc(it.label) + "</a>" : esc(it.label)) + "</li>";
+            return "<li>" + (it.href ? '<a href="' + href(it.href) + '" class="underline-offset-4 transition-colors hover:text-brand hover:underline">' + esc(it.label) + "</a>" : esc(it.label)) + "</li>";
           }).join("") + "</ul></li>";
       }).join("") + "</ol>";
   }
@@ -286,62 +334,61 @@ __PDF_SCRIPT__
   function pageAbout() {
     var html = "";
     var teamStats = stats.filter(function (s) { return s.label !== "Years of experience"; });
-    html += '<section class="on-dark bg-brand-ink py-20 sm:py-28">' + container("",
-      sectionHeading({ tone: "dark", eyebrow: "About us", title: "Thirty years of building across India", intro: about.paragraphs[1] })) + "</section>";
+    html += pageHero({ idx: "01", eyebrow: "About us", title: "Thirty years of building across India", intro: about.paragraphs[1] });
 
-    html += '<section class="py-20 sm:py-28">' + container("grid gap-12 lg:grid-cols-12",
+    html += '<section class="relative overflow-hidden py-24 sm:py-36">' + container("grid gap-12 lg:grid-cols-12 lg:gap-20",
       '<div class="lg:col-span-5">' + sectionHeading({ eyebrow: "Our story", title: "Since 1996" }) + "</div>" +
-      reveal("space-y-5 text-lg leading-relaxed text-foreground/85 lg:col-span-7",
+      reveal("space-y-6 text-lg leading-relaxed text-foreground/85 sm:text-xl sm:leading-relaxed lg:col-span-7",
         "<p>" + esc(about.paragraphs[0]) + "</p><p>" + esc(about.paragraphs[2]) + "</p>")) + "</section>";
 
-    html += '<section class="bg-muted py-20 sm:py-28">' + container("",
+    html += '<section class="relative overflow-hidden bg-muted py-24 sm:py-36">' + container("",
       sectionHeading({ eyebrow: "Vision & strategy", title: "How we deliver" }) +
-      '<ul class="mt-12 grid gap-px bg-border md:grid-cols-2">' +
+      '<ul data-stagger class="mt-16 grid gap-5 md:grid-cols-2">' +
       vision.map(function (v, i) {
-        return '<li class="bg-surface p-7 ' + (i === vision.length - 1 ? "md:col-span-2" : "") + '">' +
-          reveal("flex gap-4", icon("circle-check", "mt-1 h-5 w-5 shrink-0 text-gold-deep") + '<p class="text-foreground/90">' + esc(v) + "</p>") + "</li>";
+        return '<li class="' + (i === vision.length - 1 ? "md:col-span-2" : "") + '">' +
+          '<div data-tilt="3" class="card-lux relative flex h-full gap-5 overflow-hidden p-7 sm:p-9">' +
+          '<span class="num-out" data-index="' + String(i + 1).padStart(2, "0") + '" aria-hidden="true"></span>' +
+          icon("circle-check", "mt-1 h-6 w-6 shrink-0 text-gold-deep") + '<p class="relative z-[1] pr-14 text-foreground/90">' + esc(v) + "</p></div></li>";
       }).join("") + "</ul>") + "</section>";
 
-    html += '<section class="py-20 sm:py-28">' + container("",
+    html += '<section class="relative overflow-hidden py-24 sm:py-36">' + container("",
       sectionHeading({ eyebrow: "Leadership", title: "Krishna Builder: Our Team", intro: DATA.teamIntro }) +
-      '<ul class="mt-12 grid gap-6 md:grid-cols-3">' +
-      leadership.map(function (person, i) {
+      '<ul data-stagger class="mt-16 grid gap-6 md:grid-cols-3">' +
+      leadership.map(function (person) {
         var initials = person.name.replace("Mr. ", "").split(" ").map(function (w) { return w[0]; }).join("");
-        return "<li>" + reveal("h-full",
-          '<div class="h-full border border-border bg-surface p-8">' +
-          '<div aria-hidden="true" class="flex h-16 w-16 items-center justify-center bg-brand font-display text-xl font-extrabold text-gold">' + esc(initials) + "</div>" +
-          '<h3 class="mt-6 text-xl font-bold text-brand-ink">' + esc(person.name) + "</h3>" +
-          '<p class="mt-1 text-sm font-semibold text-gold-deep">' + esc(person.role) + "</p>" +
-          (person.bio ? '<p class="mt-4 text-sm leading-relaxed text-muted-foreground">' + esc(person.bio) + "</p>" : "") + "</div>", i * 0.08) + "</li>";
+        return '<li class="h-full"><div data-tilt="6" class="card-lux relative h-full p-9">' +
+          '<div aria-hidden="true" class="depth flex h-20 w-20 items-center justify-center rounded-full border-2 border-gold bg-gradient-to-br from-brand-2 to-brand font-display text-2xl font-extrabold text-gold shadow-[0_18px_30px_-14px_rgba(74,35,112,0.8)]">' + esc(initials) + "</div>" +
+          '<h3 class="mt-8 text-2xl font-bold text-brand-ink">' + esc(person.name) + "</h3>" +
+          '<p class="mt-1.5 text-sm font-semibold text-gold-deep">' + esc(person.role) + "</p>" +
+          (person.bio ? '<p class="mt-5 text-sm leading-relaxed text-muted-foreground">' + esc(person.bio) + "</p>" : "") + "</div></li>";
       }).join("") + "</ul>" +
-      reveal("", '<p class="mt-10 max-w-4xl leading-relaxed text-muted-foreground">' + esc(DATA.leadershipNote) + "</p>")) + "</section>";
+      reveal("", '<p class="mt-12 max-w-4xl leading-relaxed text-muted-foreground">' + esc(DATA.leadershipNote) + "</p>")) + "</section>";
 
-    html += '<section class="on-dark bg-brand-ink py-20 text-white sm:py-28">' + container("",
+    html += '<section class="mesh grain on-dark relative overflow-hidden py-24 text-white sm:py-36">' + deco() + '<div class="gold-rule absolute inset-x-0 top-0"></div>' + container("relative z-[2]",
       sectionHeading({ tone: "dark", eyebrow: "Workforce", title: "A team of 300+ professionals", intro: DATA.workforceNote }) +
-      '<div class="mt-12">' + statGrid(teamStats, true) + "</div>") + "</section>";
+      '<div class="mt-16">' + statGrid(teamStats, true) + "</div>") + "</section>";
 
-    html += '<section class="py-20 sm:py-28">' + container("grid gap-12 lg:grid-cols-12",
-      '<div class="lg:col-span-4">' + sectionHeading({ eyebrow: "Our journey", title: "Milestones", intro: "Founding year and completed projects, as recorded in our business profile." }) + "</div>" +
+    html += '<section class="relative overflow-hidden py-24 sm:py-36">' + container("grid gap-14 lg:grid-cols-12 lg:gap-20",
+      '<div class="lg:col-span-4 lg:sticky lg:top-32 lg:self-start">' + sectionHeading({ eyebrow: "Our journey", title: "Milestones", intro: "Founding year and completed projects, as recorded in our business profile." }) + "</div>" +
       '<div class="lg:col-span-8">' + timeline(buildTimeline()) + "</div>") + "</section>";
     return html;
   }
 
   function pageServices() {
-    return '<section class="on-dark bg-brand-ink py-20 sm:py-28">' + container("",
-      sectionHeading({ tone: "dark", eyebrow: "Our operations", title: "Full-spectrum construction solutions", intro: "Internal and external infrastructure, waste water treatment facilities, interior works, IT and HVAC, with value engineering and precise architectural coordination on an efficient EPC basis." })) + "</section>" +
-      '<section class="py-20 sm:py-28">' + container("",
-        '<ol class="grid gap-px bg-border md:grid-cols-2">' +
+    return pageHero({ idx: "02", eyebrow: "Our operations", title: "Full-spectrum construction solutions", intro: "Internal and external infrastructure, waste water treatment facilities, interior works, IT and HVAC, with value engineering and precise architectural coordination on an efficient EPC basis." }) +
+      '<section class="relative overflow-hidden py-24 sm:py-32">' + container("",
+        '<ol data-stagger class="grid gap-6 md:grid-cols-2">' +
         services.map(function (s, i) {
-          return '<li class="bg-surface">' + reveal("h-full",
-            '<article class="flex h-full gap-6 p-8 sm:p-10">' +
-            '<div class="flex h-14 w-14 shrink-0 items-center justify-center bg-brand text-gold">' + icon(s.icon, "h-7 w-7") + "</div>" +
-            '<div><p class="text-xs font-semibold uppercase tracking-[0.2em] text-gold-deep">' + String(i + 1).padStart(2, "0") + "</p>" +
-            '<h2 class="mt-1 text-xl font-bold text-brand-ink">' + esc(s.title) + "</h2>" +
-            '<p class="mt-3 leading-relaxed text-muted-foreground">' + esc(s.summary) + "</p></div></article>", (i % 2) * 0.08) + "</li>";
+          return '<li class="h-full"><article data-tilt="4" class="card-lux relative flex h-full gap-6 overflow-hidden p-8 sm:p-10">' +
+            '<span class="num-out" style="font-size:5.5rem" data-index="' + String(i + 1).padStart(2, "0") + '" aria-hidden="true"></span>' +
+            '<div class="depth flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-2 to-brand text-gold shadow-[0_16px_28px_-12px_rgba(74,35,112,0.8)]">' + icon(s.icon, "h-7 w-7") + "</div>" +
+            '<div class="relative z-[1]"><p class="text-xs font-semibold uppercase tracking-[0.2em] text-gold-deep">' + String(i + 1).padStart(2, "0") + "</p>" +
+            '<h2 class="mt-1 text-xl font-bold text-brand-ink sm:text-2xl">' + esc(s.title) + "</h2>" +
+            '<p class="mt-3 leading-relaxed text-muted-foreground">' + esc(s.summary) + "</p></div></article></li>";
         }).join("") + "</ol>") + "</section>" +
-      '<section class="bg-muted py-16">' + container("flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center",
-        '<h2 class="max-w-xl text-2xl font-extrabold text-brand-ink sm:text-3xl">See these services applied on real projects.</h2>' +
-        button({ href: "/projects", children: "View projects" })) + "</section>";
+      '<section class="mesh grain on-dark relative overflow-hidden py-20 text-white"><div class="gold-rule absolute inset-x-0 top-0"></div>' + container("relative z-[2] flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-center",
+        '<h2 data-split class="max-w-xl text-3xl font-extrabold sm:text-4xl">See these services applied on real projects.</h2>' +
+        reveal("", button({ href: "/projects", variant: "gold", children: "View projects" }), 0.3)) + "</section>";
   }
 
   function turnoverChart() {
@@ -352,61 +399,59 @@ __PDF_SCRIPT__
     }).join(", ") + ".";
     return "<figure>" +
       '<div role="img" aria-label="' + esc(label) + '" class="relative">' +
-      '<div class="relative ml-14 h-72 sm:h-80">' +
+      '<div class="relative ml-14 h-72 sm:h-96">' +
       ticks.map(function (t) {
-        return '<div class="absolute inset-x-0 border-t border-border" style="bottom:' + (t / MAX) * 100 + '%">' +
+        return '<div class="absolute inset-x-0 border-t border-dashed border-border" style="bottom:' + (t / MAX) * 100 + '%">' +
           '<span class="absolute -left-14 -translate-y-1/2 text-xs text-muted-foreground">' + nfInt.format(t) + "</span></div>";
       }).join("") +
-      '<div class="absolute inset-0 flex items-end justify-around gap-3 px-2 sm:gap-6">' +
+      '<div class="absolute inset-0 flex items-end justify-around gap-3 px-2 sm:gap-8">' +
       financials.map(function (f, i) {
         return '<div class="relative flex h-full flex-1 flex-col justify-end">' +
-          '<div data-bar="' + (f.lakhs / MAX) * 100 + '%" style="--d:' + i * 0.1 + 's" class="bar relative w-full ' +
-          (f.projected ? "border-2 border-dashed border-brand bg-[repeating-linear-gradient(45deg,#e9dff3,#e9dff3_6px,#ffffff_6px,#ffffff_12px)]" : "bg-brand") + '">' +
+          '<div data-bar="' + (f.lakhs / MAX) * 100 + '%" style="--d:' + i * 0.12 + 's" class="bar relative w-full ' +
+          (f.projected ? "border-2 border-dashed border-brand bg-[repeating-linear-gradient(45deg,#e9dff3,#e9dff3_6px,#ffffff_6px,#ffffff_12px)]" : "bar-fill") + '">' +
           '<span class="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-bold text-brand-ink sm:text-sm">' + nf.format(f.lakhs) + "</span></div></div>";
       }).join("") + "</div></div>" +
-      '<div class="ml-14 mt-3 flex justify-around gap-3 px-2 sm:gap-6">' +
+      '<div class="ml-14 mt-3 flex justify-around gap-3 px-2 sm:gap-8">' +
       financials.map(function (f) {
         return '<div class="flex-1 text-center"><p class="text-xs font-semibold text-brand-ink sm:text-sm">' + f.year + "</p>" +
           (f.projected ? '<p class="mt-0.5 text-[11px] font-bold uppercase tracking-wider text-gold-deep">Projected</p>' : "") + "</div>";
       }).join("") + "</div></div>" +
-      '<figcaption class="mt-6 text-sm text-muted-foreground">Annual turnover, figures in INR Lakhs. 2026-27 is a projection.</figcaption></figure>';
+      '<figcaption class="mt-8 text-sm text-muted-foreground">Annual turnover, figures in INR Lakhs. 2026-27 is a projection.</figcaption></figure>';
   }
 
   function pageCapabilities() {
     var teamStats = stats.filter(function (s) { return s.label !== "Years of experience"; });
-    return '<section class="on-dark bg-brand-ink py-20 sm:py-28">' + container("",
-      sectionHeading({ tone: "dark", eyebrow: "Capabilities", title: "The people, plant and track record behind every project", intro: DATA.workforceNote })) + "</section>" +
-      '<section aria-label="Team strength" class="bg-brand-ink">' + container("", statGrid(teamStats, true)) + "</section>" +
-      '<section class="py-20 sm:py-28">' + container("grid gap-12 lg:grid-cols-12",
+    return pageHero({ idx: "04", eyebrow: "Capabilities", title: "The people, plant and track record behind every project", intro: DATA.workforceNote,
+        extra: '<div aria-label="Team strength" role="group">' + statGrid(teamStats, true) + "</div>" }) +
+      '<section class="relative overflow-hidden py-24 sm:py-36">' + container("grid gap-14 lg:grid-cols-12 lg:gap-16",
         '<div class="lg:col-span-4">' + sectionHeading({ eyebrow: "Financial performance", title: "Steady growth in turnover", intro: "Annual turnover in INR Lakhs, as stated in our business profile." }) + "</div>" +
-        reveal("lg:col-span-8", turnoverChart())) + "</section>" +
-      '<section class="bg-muted py-20 sm:py-28">' + container("",
+        reveal("card-lux p-6 pt-12 sm:p-10 sm:pt-14 lg:col-span-8", turnoverChart())) + "</section>" +
+      '<section class="relative overflow-hidden bg-muted py-24 sm:py-36">' + container("",
         sectionHeading({ eyebrow: "Plant & machinery", title: "Equipment owned and deployed on our sites" }) +
-        reveal("mt-12", '<div class="overflow-x-auto border border-border bg-surface"><table class="w-full min-w-[34rem] text-left text-sm">' +
+        reveal("mt-14", '<div class="card-lux overflow-x-auto"><table class="w-full min-w-[34rem] text-left text-sm">' +
           '<caption class="sr-only">Plant and machinery</caption>' +
-          '<thead class="bg-brand text-white"><tr><th scope="col" class="w-16 px-5 py-4 font-semibold">S. No</th><th scope="col" class="px-5 py-4 font-semibold">Name of equipment</th><th scope="col" class="px-5 py-4 font-semibold">Nos.</th><th scope="col" class="px-5 py-4 font-semibold">Type</th></tr></thead>' +
+          '<thead class="bg-gradient-to-r from-brand-ink via-brand to-brand-2 text-white"><tr><th scope="col" class="w-16 px-5 py-5 font-semibold">S. No</th><th scope="col" class="px-5 py-5 font-semibold">Name of equipment</th><th scope="col" class="px-5 py-5 font-semibold">Nos.</th><th scope="col" class="px-5 py-5 font-semibold">Type</th></tr></thead>' +
           '<tbody class="divide-y divide-border">' +
           machinery.map(function (m) {
-            return '<tr class="odd:bg-surface even:bg-background"><td class="px-5 py-3 text-muted-foreground">' + m.no + "</td>" +
-              '<th scope="row" class="px-5 py-3 font-semibold text-brand-ink">' + esc(m.name) + "</th>" +
-              '<td class="px-5 py-3">' + esc(m.qty) + '</td><td class="px-5 py-3 text-muted-foreground">' + esc(m.type) + "</td></tr>";
+            return '<tr class="transition-colors odd:bg-surface even:bg-background hover:bg-gold/10"><td class="px-5 py-3.5 text-muted-foreground">' + m.no + "</td>" +
+              '<th scope="row" class="px-5 py-3.5 font-semibold text-brand-ink">' + esc(m.name) + "</th>" +
+              '<td class="px-5 py-3.5">' + esc(m.qty) + '</td><td class="px-5 py-3.5 text-muted-foreground">' + esc(m.type) + "</td></tr>";
           }).join("") + "</tbody></table></div>")) + "</section>" +
-      '<section class="py-20 sm:py-28">' + container("",
+      '<section class="relative overflow-hidden py-24 sm:py-36">' + container("",
         sectionHeading({ eyebrow: "Clients & project management consultants", title: "Government departments and institutions we serve" }) +
-        '<ul class="mt-12 grid grid-cols-2 gap-px bg-border sm:grid-cols-3 lg:grid-cols-4">' +
+        '<ul data-stagger class="mt-16 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">' +
         clientNames.map(function (c) {
-          return '<li class="flex min-h-24 items-center justify-center bg-surface px-4 text-center font-display text-lg font-extrabold text-brand">' + esc(c) + "</li>";
+          return '<li class="card-lux flex min-h-28 items-center justify-center px-4 text-center font-display text-lg font-extrabold text-brand transition-all duration-500 hover:-translate-y-1 hover:text-brand-ink">' + esc(c) + "</li>";
         }).join("") + "</ul>") + "</section>";
   }
 
   function pageProjects() {
-    return '<section class="on-dark bg-brand-ink py-20 sm:py-24">' + container("",
-      sectionHeading({ tone: "dark", eyebrow: "Our work", title: "Projects delivered and under construction", intro: "Universities, hospitals, residential townships and institutional buildings for government departments and private developers across India." })) + "</section>" +
-      '<section class="py-14 sm:py-20">' + container("",
+    return pageHero({ idx: "03", eyebrow: "Our work", title: "Projects delivered and under construction", intro: "Universities, hospitals, residential townships and institutional buildings for government departments and private developers across India." }) +
+      '<section class="relative overflow-hidden py-16 sm:py-24">' + container("",
         '<div data-browser>' +
-        '<div role="tablist" aria-label="Project status" class="flex border-b border-border" data-pb-tabs></div>' +
+        '<div role="tablist" aria-label="Project status" class="relative flex border-b border-border" data-pb-tabs><span class="absolute bottom-[-1px] left-0 h-[2px] bg-gradient-to-r from-gold-deep to-gold transition-all duration-500" style="width:0;transition-timing-function:var(--ease-out)" data-pb-ind aria-hidden="true"></span></div>' +
         '<p class="mt-6 text-sm text-muted-foreground" aria-live="polite" data-pb-count></p>' +
-        '<div id="project-panel" role="tabpanel" class="mt-6" data-pb-panel></div></div>') + "</section>";
+        '<div id="project-panel" role="tabpanel" class="mt-8" data-pb-panel></div></div>') + "</section>";
   }
 
   function pageProject(project) {
@@ -433,69 +478,70 @@ __PDF_SCRIPT__
       ? '<div class="relative aspect-[16/10] overflow-hidden">' + projectImage({ alt: project.shortTitle, label: project.sector + " · photos to be supplied" }) + "</div>"
       : images.map(function (src, i) {
           var caption = project.imageCaptions && project.imageCaptions[i];
-          return "<figure>" + '<div class="relative aspect-[16/10] overflow-hidden bg-muted">' +
+          return "<figure>" + '<div data-r="img" class="relative aspect-[16/10] overflow-hidden bg-muted shadow-[0_30px_60px_-34px_rgba(20,8,31,0.6)]">' +
             projectImage({ src: src, priority: i === 0, cls: i === 0 ? "" : "object-center",
               alt: caption ? project.shortTitle + " — " + caption : project.shortTitle + " — view " + (i + 1) }) + "</div>" +
-            (caption ? '<figcaption class="mt-2 text-sm font-semibold text-brand-ink">' + esc(caption) + "</figcaption>" : "") + "</figure>";
+            (caption ? '<figcaption class="mt-3 text-sm font-semibold text-brand-ink">' + esc(caption) + "</figcaption>" : "") + "</figure>";
         }).join("");
 
-    return '<section class="border-b border-border bg-surface py-10 sm:py-14">' + container("",
-      '<a href="#/projects" class="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand hover:text-brand-ink">' + icon("arrow-left", "h-4 w-4") + " All projects</a>" +
-      reveal("",
-        '<div class="mt-4 flex flex-wrap items-center gap-3">' +
-        '<span class="rounded-sm px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider ' + (ongoing ? "bg-gold text-brand-ink" : "bg-brand text-white") + '">' + project.status + "</span>" +
-        '<span class="text-xs font-semibold uppercase tracking-[0.18em] text-gold-deep">' + esc(project.sector) + "</span></div>" +
-        '<h1 class="mt-4 max-w-4xl text-3xl font-extrabold text-brand-ink sm:text-4xl lg:text-5xl">' + esc(project.shortTitle) + "</h1>" +
-        '<p class="mt-5 max-w-3xl text-base text-muted-foreground sm:text-lg">' + esc(project.title) + "</p>")) + "</section>" +
-      '<section class="py-12 sm:py-16">' + container("grid gap-10 lg:grid-cols-12",
-        '<div class="lg:col-span-7"><div class="grid gap-4">' + gallery + "</div></div>" +
-        '<aside class="lg:col-span-5" aria-label="Project details"><div class="border border-border bg-surface p-6 sm:p-8 lg:sticky lg:top-24">' +
+    return '<section class="mesh grain on-dark relative isolate overflow-hidden text-white">' + deco() + container("relative z-[2] pb-16 pt-36 sm:pb-24 sm:pt-44",
+      '<a href="#/projects" class="group inline-flex min-h-11 items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-white/80 hover:text-gold">' + icon("arrow-left", "h-4 w-4 transition-transform duration-500 group-hover:-translate-x-1") + " All projects</a>" +
+      '<div data-r class="mt-6 flex flex-wrap items-center gap-3">' +
+      '<span class="rounded-sm px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider ' + (ongoing ? "bg-gold text-brand-ink" : "bg-white text-brand-ink") + '">' + project.status + "</span>" +
+      '<span class="text-xs font-semibold uppercase tracking-[0.2em] text-gold">' + esc(project.sector) + "</span></div>" +
+      '<h1 data-split class="mt-5 max-w-4xl text-[2rem] font-extrabold sm:text-5xl lg:text-6xl">' + esc(project.shortTitle) + "</h1>" +
+      '<p data-r style="--d:.3s" class="mt-6 max-w-3xl text-base text-white/75 sm:text-lg">' + esc(project.title) + "</p>") +
+      '<div class="gold-rule absolute inset-x-0 bottom-0 z-[2]"></div></section>' +
+      '<section class="py-14 sm:py-20">' + container("grid gap-10 lg:grid-cols-12 lg:gap-14",
+        '<div class="lg:col-span-7"><div class="grid gap-6">' + gallery + "</div></div>" +
+        '<aside class="lg:col-span-5" aria-label="Project details"><div data-r class="lg:sticky lg:top-28"><div class="card-lux relative overflow-hidden p-7 sm:p-9">' +
+        '<div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-gold-deep via-gold to-gold-light" aria-hidden="true"></div>' +
         '<p class="text-xs font-semibold uppercase tracking-[0.2em] text-gold-deep">Project details</p>' +
-        '<p class="mt-2 font-display text-3xl font-extrabold text-brand">' + formatCrore(project.valueLakhs) + "</p>" +
-        '<dl class="mt-6 divide-y divide-border">' +
+        '<p class="mt-3 font-display text-4xl font-extrabold text-brand">' + formatCrore(project.valueLakhs) + "</p>" +
+        '<dl class="mt-7 divide-y divide-border">' +
         specs.map(function (r) {
-          return '<div class="grid gap-1 py-3 sm:grid-cols-5 sm:gap-4"><dt class="text-sm text-muted-foreground sm:col-span-2">' + esc(r[0]) + '</dt><dd class="text-sm font-semibold text-brand-ink sm:col-span-3">' + esc(r[1]) + "</dd></div>";
+          return '<div class="grid gap-1 py-3.5 sm:grid-cols-5 sm:gap-4"><dt class="text-sm text-muted-foreground sm:col-span-2">' + esc(r[0]) + '</dt><dd class="text-sm font-semibold text-brand-ink sm:col-span-3">' + esc(r[1]) + "</dd></div>";
         }).join("") + "</dl>" +
-        button({ href: "/contact", cls: "mt-6 w-full", children: "Enquire about similar work" }) + "</div></aside>") + "</section>" +
-      '<nav aria-label="More projects" class="border-t border-border">' + container("grid sm:grid-cols-2",
-        '<a href="' + href("/projects/" + prev.slug) + '" class="group flex flex-col gap-1 border-b border-border py-8 sm:border-b-0 sm:border-r sm:pr-8">' +
-        '<span class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">' + icon("arrow-left", "h-4 w-4") + " Previous</span>" +
-        '<span class="font-display text-lg font-bold text-brand-ink group-hover:text-brand">' + esc(prev.shortTitle) + "</span></a>" +
-        '<a href="' + href("/projects/" + next.slug) + '" class="group flex flex-col gap-1 py-8 sm:items-end sm:pl-8 sm:text-right">' +
-        '<span class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Next ' + icon("arrow-right", "h-4 w-4") + "</span>" +
-        '<span class="font-display text-lg font-bold text-brand-ink group-hover:text-brand">' + esc(next.shortTitle) + "</span></a>") + "</nav>";
+        button({ href: "/contact", cls: "mt-8 w-full", children: "Enquire about similar work" }) + "</div></div></aside>") + "</section>" +
+      '<nav aria-label="More projects" class="border-t border-border bg-white">' + container("grid sm:grid-cols-2",
+        '<a href="' + href("/projects/" + prev.slug) + '" class="group flex flex-col gap-2 border-b border-border py-10 transition-colors hover:text-brand sm:border-b-0 sm:border-r sm:pr-10">' +
+        '<span class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">' + icon("arrow-left", "h-4 w-4 transition-transform duration-500 group-hover:-translate-x-1.5") + " Previous</span>" +
+        '<span class="font-display text-xl font-bold text-brand-ink transition-colors group-hover:text-brand">' + esc(prev.shortTitle) + "</span></a>" +
+        '<a href="' + href("/projects/" + next.slug) + '" class="group flex flex-col gap-2 py-10 sm:items-end sm:pl-10 sm:text-right">' +
+        '<span class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Next ' + icon("arrow-right", "h-4 w-4 transition-transform duration-500 group-hover:translate-x-1.5") + "</span>" +
+        '<span class="font-display text-xl font-bold text-brand-ink transition-colors group-hover:text-brand">' + esc(next.shortTitle) + "</span></a>") + "</nav>";
   }
 
   function pageContact() {
     var mapSrc = "https://www.google.com/maps?q=" + encodeURIComponent(company.mapQuery) + "&output=embed";
-    return '<section class="on-dark bg-brand-ink py-20 sm:py-28">' + container("",
-      sectionHeading({ tone: "dark", eyebrow: "Contact", title: "Let’s talk about your project", intro: "Send an enquiry, call us, or write to our tender cell for bids and empanelment." })) + "</section>" +
-      '<section class="py-16 sm:py-24">' + container("grid gap-14 lg:grid-cols-12",
-        reveal("lg:col-span-7", '<h2 class="mb-8 text-2xl font-extrabold text-brand-ink sm:text-3xl">Send an enquiry</h2><div id="enquiry-root"></div>') +
+    return pageHero({ idx: "05", eyebrow: "Contact", title: "Let’s talk about your project", intro: "Send an enquiry, call us, or write to our tender cell for bids and empanelment." }) +
+      '<section class="relative overflow-hidden py-20 sm:py-28">' + container("grid gap-12 lg:grid-cols-12 lg:gap-14",
+        reveal("lg:col-span-7", '<h2 class="mb-8 text-3xl font-extrabold text-brand-ink sm:text-4xl">Send an enquiry</h2><div class="card-lux p-6 sm:p-10" id="enquiry-root"></div>') +
         reveal("lg:col-span-5",
-          '<h2 class="mb-8 text-2xl font-extrabold text-brand-ink sm:text-3xl">Head office</h2>' +
-          '<address class="space-y-6 not-italic">' +
-          '<p class="flex gap-4">' + icon("map-pin", "mt-1 h-5 w-5 shrink-0 text-gold-deep") + "<span>" +
+          '<div class="mesh grain on-dark relative overflow-hidden p-8 text-white/90 shadow-[0_40px_80px_-40px_rgba(20,8,31,0.8)] sm:p-10"><div class="relative z-[2]">' +
+          '<h2 class="mb-8 text-3xl font-extrabold text-white sm:text-4xl">Head office</h2>' +
+          '<address class="space-y-7 not-italic">' +
+          '<p class="flex gap-4">' + icon("map-pin", "mt-1 h-5 w-5 shrink-0 text-gold") + "<span>" +
           company.address.lines.map(function (l) { return '<span class="block">' + esc(l) + "</span>"; }).join("") + "</span></p>" +
-          '<p class="flex gap-4">' + icon("phone", "mt-1 h-5 w-5 shrink-0 text-gold-deep") + '<span class="flex flex-col">' +
-          company.phones.map(function (p) { return '<a href="tel:' + p.tel + '" class="min-h-8 hover:text-brand">' + esc(p.label) + "</a>"; }).join("") + "</span></p>" +
-          '<p class="flex gap-4">' + icon("mail", "mt-1 h-5 w-5 shrink-0 text-gold-deep") + '<span class="flex flex-col">' +
-          '<a href="mailto:' + company.emails.general + '" class="min-h-8 hover:text-brand">' + company.emails.general + "</a>" +
-          '<a href="mailto:' + company.emails.proprietor + '" class="min-h-8 hover:text-brand">' + company.emails.proprietor + "</a></span></p></address>" +
-          '<div class="mt-8 border-l-4 border-gold bg-muted p-6"><p class="text-xs font-semibold uppercase tracking-[0.2em] text-gold-deep">Tender cell</p>' +
-          '<a href="mailto:' + company.emails.tender + '" class="mt-2 block font-display text-lg font-bold text-brand hover:text-brand-ink">' + company.emails.tender + "</a>" +
-          '<p class="mt-1 text-sm text-muted-foreground">For tenders, bids and empanelment.</p></div>' +
-          '<a href="https://wa.me/' + company.whatsapp + '" target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex min-h-11 items-center gap-2 font-semibold text-brand hover:text-brand-ink">' + icon("message-circle", "h-5 w-5") + " Message us on WhatsApp</a>", 0.08)) + "</section>" +
-      '<section aria-label="Map"><iframe title="Krishna Builder head office on Google Maps" src="' + esc(mapSrc) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="h-96 w-full border-0 grayscale"></iframe></section>';
+          '<p class="flex gap-4">' + icon("phone", "mt-1 h-5 w-5 shrink-0 text-gold") + '<span class="flex flex-col">' +
+          company.phones.map(function (p) { return '<a href="tel:' + p.tel + '" class="min-h-8 transition-colors hover:text-gold">' + esc(p.label) + "</a>"; }).join("") + "</span></p>" +
+          '<p class="flex gap-4">' + icon("mail", "mt-1 h-5 w-5 shrink-0 text-gold") + '<span class="flex flex-col">' +
+          '<a href="mailto:' + company.emails.general + '" class="min-h-8 break-all transition-colors hover:text-gold">' + company.emails.general + "</a>" +
+          '<a href="mailto:' + company.emails.proprietor + '" class="min-h-8 break-all transition-colors hover:text-gold">' + company.emails.proprietor + "</a></span></p></address>" +
+          '<div class="mt-9 border-l-4 border-gold bg-white/5 p-6"><p class="text-xs font-semibold uppercase tracking-[0.2em] text-gold">Tender cell</p>' +
+          '<a href="mailto:' + company.emails.tender + '" class="mt-2 block break-all font-display text-lg font-bold text-white transition-colors hover:text-gold">' + company.emails.tender + "</a>" +
+          '<p class="mt-1 text-sm text-white/65">For tenders, bids and empanelment.</p></div>' +
+          '<a href="https://wa.me/' + company.whatsapp + '" target="_blank" rel="noopener noreferrer" class="mt-8 inline-flex min-h-11 items-center gap-2 font-semibold text-gold transition-colors hover:text-white">' + icon("message-circle", "h-5 w-5") + " Message us on WhatsApp</a></div></div>", 0.1)) + "</section>" +
+      '<section aria-label="Map" class="relative"><iframe title="Krishna Builder head office on Google Maps" src="' + esc(mapSrc) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="h-[26rem] w-full border-0 grayscale transition-[filter] duration-700 hover:grayscale-0"></iframe></section>';
   }
 
   function pageNotFound() {
-    return container("py-32 text-center",
-      '<p class="font-display text-7xl font-extrabold text-gold">404</p>' +
-      '<h1 class="mt-4 text-3xl font-extrabold text-brand-ink">Page not found</h1>' +
-      '<p class="mx-auto mt-3 max-w-md text-muted-foreground">The page you’re looking for doesn’t exist or has moved.</p>' +
-      '<div class="mt-8 flex justify-center gap-4">' + button({ href: "/", children: "Back to home" }) +
-      button({ href: "/projects", variant: "outline", children: "View projects" }) + "</div>");
+    return '<section class="mesh grain on-dark relative flex min-h-screen items-center overflow-hidden text-white">' + deco() + container("relative z-[2] py-40 text-center",
+      '<p class="gold-grad font-display text-8xl font-extrabold sm:text-9xl">404</p>' +
+      '<h1 class="mt-4 text-3xl font-extrabold text-white sm:text-4xl">Page not found</h1>' +
+      '<p class="mx-auto mt-4 max-w-md text-white/75">The page you’re looking for doesn’t exist or has moved.</p>' +
+      '<div class="mt-10 flex flex-wrap justify-center gap-4">' + button({ href: "/", variant: "gold", children: "Back to home" }) +
+      button({ href: "/projects", variant: "outline-light", children: "View projects" }) + "</div>") + "</section>";
   }
 
   /* ============================ CHROME ============================= */
@@ -507,36 +553,35 @@ __PDF_SCRIPT__
   function renderNav(path) {
     $("#desktop-nav").innerHTML = '<ul class="flex items-center gap-1">' + nav.map(function (item) {
       var active = isActive(path, item.href);
-      return "<li><a href=\"" + href(item.href) + '" ' + (active ? 'aria-current="page"' : "") +
-        ' class="relative inline-flex min-h-11 items-center px-4 text-sm font-semibold transition-colors ' + (active ? "text-brand" : "text-foreground/75 hover:text-brand") + '">' +
-        item.label + (active ? '<span class="absolute inset-x-4 bottom-2 h-0.5 bg-gold" aria-hidden="true"></span>' : "") + "</a></li>";
+      return '<li><a href="' + href(item.href) + '" ' + (active ? 'aria-current="page"' : "") + ' class="nav-link">' + item.label + "</a></li>";
     }).join("") + "</ul>";
-    $("#mobile-nav").innerHTML = '<ul class="divide-y divide-white/10 border-y border-white/10">' + nav.map(function (item) {
+    $("#mobile-nav").innerHTML = '<ul class="divide-y divide-white/10 border-y border-white/10">' + nav.map(function (item, i) {
       var active = isActive(path, item.href);
-      return "<li><a href=\"" + href(item.href) + '" ' + (active ? 'aria-current="page"' : "") +
-        ' class="flex min-h-14 items-center font-display text-2xl font-bold ' + (active ? "text-gold" : "text-white") + '">' + item.label + "</a></li>";
+      return '<li class="m-item" style="--i:' + (i + 1) + '"><a href="' + href(item.href) + '" ' + (active ? 'aria-current="page"' : "") +
+        ' class="flex min-h-16 items-center font-display text-3xl font-bold ' + (active ? "text-gold" : "text-white") + '">' + item.label + "</a></li>";
     }).join("") + "</ul>";
   }
 
   function renderStaticChrome() {
-    $("#header-logo").innerHTML = logo("colour");
+    $("#header-logo").innerHTML = logo("light");
     $("#whatsapp-btn").href = "https://wa.me/" + company.whatsapp + "?text=" + encodeURIComponent("Hello Krishna Builder, I would like to make an enquiry.");
     $("#whatsapp-btn").innerHTML = icon("message-circle", "h-5 w-5") + '<span class="hidden sm:inline">WhatsApp</span>';
-    $("#site-footer").innerHTML = container("grid gap-12 py-16 md:grid-cols-12",
+    $("#site-footer").innerHTML = '<div class="gold-rule absolute inset-x-0 top-0"></div><div class="relative z-[2]">' + container("grid gap-12 py-20 md:grid-cols-12",
       '<div class="md:col-span-5">' + logo("light") +
-      '<p class="mt-6 max-w-sm text-sm leading-relaxed">' + esc(company.nature) + ". Serving government and private clients across India since " + company.founded + ".</p></div>" +
-      '<nav aria-label="Footer" class="md:col-span-2"><h2 class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-gold">Explore</h2><ul class="space-y-1">' +
-      nav.map(function (item) { return '<li><a href="' + href(item.href) + '" class="inline-flex min-h-9 items-center text-sm transition-colors hover:text-white">' + item.label + "</a></li>"; }).join("") + "</ul></nav>" +
-      '<div class="md:col-span-5"><h2 class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-gold">Head office</h2>' +
-      '<address class="space-y-4 not-italic text-sm">' +
+      '<p class="mt-7 max-w-sm text-sm leading-relaxed">' + esc(company.nature) + ". Serving government and private clients across India since " + company.founded + ".</p></div>" +
+      '<nav aria-label="Footer" class="md:col-span-2"><h2 class="mb-5 text-xs font-semibold uppercase tracking-[0.24em] text-gold">Explore</h2><ul class="space-y-1">' +
+      nav.map(function (item) { return '<li><a href="' + href(item.href) + '" class="inline-flex min-h-9 items-center text-sm transition-all duration-300 hover:translate-x-1 hover:text-gold">' + item.label + "</a></li>"; }).join("") + "</ul></nav>" +
+      '<div class="md:col-span-5"><h2 class="mb-5 text-xs font-semibold uppercase tracking-[0.24em] text-gold">Head office</h2>' +
+      '<address class="space-y-5 not-italic text-sm">' +
       '<p class="flex gap-3">' + icon("map-pin", "mt-0.5 h-4 w-4 shrink-0 text-gold") + "<span>" + esc(company.address.full) + "</span></p>" +
       '<p class="flex gap-3">' + icon("phone", "mt-0.5 h-4 w-4 shrink-0 text-gold") + '<span class="flex flex-col">' +
-      company.phones.map(function (p) { return '<a href="tel:' + p.tel + '" class="hover:text-white">' + esc(p.label) + "</a>"; }).join("") + "</span></p>" +
+      company.phones.map(function (p) { return '<a href="tel:' + p.tel + '" class="transition-colors hover:text-gold">' + esc(p.label) + "</a>"; }).join("") + "</span></p>" +
       '<p class="flex gap-3">' + icon("mail", "mt-0.5 h-4 w-4 shrink-0 text-gold") + '<span class="flex flex-col">' +
-      '<a href="mailto:' + company.emails.general + '" class="hover:text-white">' + company.emails.general + "</a>" +
-      '<a href="mailto:' + company.emails.tender + '" class="hover:text-white">' + company.emails.tender + ' <span class="text-white/60">(tender cell)</span></a></span></p></address></div>') +
+      '<a href="mailto:' + company.emails.general + '" class="break-all transition-colors hover:text-gold">' + company.emails.general + "</a>" +
+      '<a href="mailto:' + company.emails.tender + '" class="break-all transition-colors hover:text-gold">' + company.emails.tender + ' <span class="text-white/60">(tender cell)</span></a></span></p></address></div>') +
+      '<div class="wordmark mx-auto w-full max-w-7xl overflow-hidden px-5 sm:px-8 lg:px-12" aria-hidden="true"></div>' +
       '<div class="border-t border-white/10">' + container("flex flex-col gap-2 py-6 text-xs text-white/60 sm:flex-row sm:justify-between",
-        "<p>© " + new Date().getFullYear() + " " + esc(company.legalName) + ". All rights reserved.</p><p>" + esc(company.type) + " · Est. " + company.founded + "</p>") + "</div>";
+        "<p>© " + new Date().getFullYear() + " " + esc(company.legalName) + ". All rights reserved.</p><p>" + esc(company.type) + " · Est. " + company.founded + "</p>") + "</div></div>";
   }
 
   /* ---------------------------- mobile menu ------------------------- */
@@ -548,22 +593,25 @@ __PDF_SCRIPT__
     btn.setAttribute("aria-expanded", String(open));
     btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
     btn.innerHTML = icon(open ? "x" : "menu", "h-6 w-6");
-    btn.style.color = open ? "#fff" : ""; // the original's purple X is nearly invisible on the dark overlay
     clearTimeout(menuTimer);
     if (open) {
       overlay.hidden = false;
       void overlay.offsetWidth;
       overlay.classList.add("open");
+      $("#hdr").classList.remove("hide");
       document.body.dataset.prevOverflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
     } else {
       overlay.classList.remove("open");
-      menuTimer = setTimeout(function () { overlay.hidden = true; }, 200);
+      menuTimer = setTimeout(function () { overlay.hidden = true; }, 350);
       document.body.style.overflow = document.body.dataset.prevOverflow || "";
     }
   }
 
-  /* =========================== BEHAVIOURS ========================== */
+  /* ================================================================
+     MOTION ENGINE ("fx"): reveals, split headings, 3D tilt, parallax,
+     magnetic buttons, smooth scroll, cursor, progress. Vanilla JS.
+     ================================================================ */
 
   var cleanups = [];
   var bezier = function (x1, y1, x2, y2) {
@@ -597,15 +645,107 @@ __PDF_SCRIPT__
     cleanups.push(function () { io.disconnect(); });
   }
 
-  function initReveal(root) {
-    observeOnce($$(".reveal", root), "0px 0px -60px 0px", function (el) { el.classList.add("in"); });
+  function splitWords(el) {
+    if (el.dataset.splitDone) return;
+    el.dataset.splitDone = "1";
+    var n = 0;
+    (function walk(node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (c) {
+        if (c.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          c.nodeValue.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(" ")); return; }
+            var s = document.createElement("span"), i = document.createElement("i");
+            s.className = "sw"; i.style.setProperty("--w", n++); i.textContent = part;
+            s.appendChild(i); frag.appendChild(s);
+          });
+          c.parentNode.replaceChild(frag, c);
+        } else if (c.nodeType === 1) walk(c);
+      });
+    })(el);
+  }
+
+  function bindPointer(el) {
+    if (!FINE || el._fx) return;
+    el._fx = 1;
+    var max = parseFloat(el.dataset.tilt) || 6, tilt = el.hasAttribute("data-tilt");
+    el.addEventListener("pointermove", function (e) {
+      var r = el.getBoundingClientRect(), px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+      el.style.setProperty("--mx", (px * 100).toFixed(1) + "%");
+      el.style.setProperty("--my", (py * 100).toFixed(1) + "%");
+      if (tilt) {
+        el.style.setProperty("--ry", ((px - 0.5) * 2 * max).toFixed(2) + "deg");
+        el.style.setProperty("--rx", ((0.5 - py) * 2 * max).toFixed(2) + "deg");
+        el.classList.add("is-active");
+      }
+    });
+    el.addEventListener("pointerleave", function () {
+      el.classList.remove("is-active");
+      el.style.setProperty("--rx", "0deg");
+      el.style.setProperty("--ry", "0deg");
+    });
+  }
+
+  function bindMagnetic(el) {
+    if (!FINE || el._mag) return;
+    el._mag = 1;
+    el.addEventListener("pointermove", function (e) {
+      var r = el.getBoundingClientRect();
+      el.style.transform = "translate3d(" + ((e.clientX - (r.left + r.width / 2)) * 0.22).toFixed(1) + "px," + ((e.clientY - (r.top + r.height / 2)) * 0.32).toFixed(1) + "px,0)";
+    });
+    el.addEventListener("pointerleave", function () { el.style.transform = ""; });
+  }
+
+  // Parallax: transforms the element, measures its (static) parent so there is no feedback loop.
+  var parallaxItems = [];
+  function parallaxTick() {
+    if (!parallaxItems.length || reduceMotion()) return;
+    var vh = window.innerHeight;
+    parallaxItems.forEach(function (it) {
+      var r = it.parent.getBoundingClientRect();
+      if (r.bottom < -300 || r.top > vh + 300) return;
+      var c = r.top + r.height / 2 - vh / 2;
+      it.el.style.transform = "translate3d(0," + (-c * it.k).toFixed(1) + "px,0)";
+    });
+  }
+
+  function initHero3d(root) {
+    $$("[data-hero3d]", root).forEach(function (h3) {
+      var section = h3.parentElement;
+      if (FINE && !reduceMotion()) {
+        var onMove = function (e) {
+          var r = section.getBoundingClientRect();
+          h3.style.setProperty("--mx", (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(3));
+          h3.style.setProperty("--my", (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3));
+        };
+        section.addEventListener("pointermove", onMove);
+        section.addEventListener("pointerleave", function () { h3.style.setProperty("--mx", 0); h3.style.setProperty("--my", 0); });
+      }
+    });
+  }
+
+  function initFx(root) {
+    // staggered children
+    $$("[data-stagger]", root).forEach(function (parent) {
+      Array.prototype.slice.call(parent.children).forEach(function (c, i) {
+        if (!c.hasAttribute("data-r")) c.setAttribute("data-r", "");
+        c.style.setProperty("--d", Math.min(i * 0.09, 0.7).toFixed(2) + "s");
+      });
+    });
+    $$("[data-split]", root).forEach(splitWords);
+    observeOnce($$("[data-r], [data-split]", root), "0px 0px -8% 0px", function (el) { el.classList.add("in"); });
+    $$("[data-tilt], [data-spot]", root).forEach(bindPointer);
+    $$("[data-magnetic]", root).forEach(bindMagnetic);
+    parallaxItems = $$("[data-parallax]", root).map(function (el) { return { el: el, parent: el.parentElement, k: parseFloat(el.dataset.parallax) || 0.1 }; });
+    initHero3d(root);
   }
 
   function initCountUp(root) {
     if (reduceMotion()) return;
     observeOnce($$("[data-countup]", root), "0px 0px -40px 0px", function (el) {
       var value = Number(el.dataset.countup), suffix = el.dataset.suffix || "";
-      var start = performance.now(), dur = 1600, raf;
+      var start = performance.now(), dur = 1800, raf;
       var tick = function (now) {
         var p = Math.min(1, (now - start) / dur);
         el.textContent = Math.round(value * easeOut(p)) + suffix;
@@ -624,13 +764,13 @@ __PDF_SCRIPT__
   function initTimeline(root) {
     var ol = $("[data-timeline]", root);
     if (!ol) return;
-    var line = $("[data-timeline-line]", ol), ticking = false;
+    var line = $("[data-timeline-line]", ol), nodes = $$("[data-tl-node]", ol), ticking = false;
     var update = function () {
       ticking = false;
       var vh = window.innerHeight, r = ol.getBoundingClientRect();
-      // framer-motion offset ["start 75%", "end 60%"]
-      var p = Math.min(1, Math.max(0, (0.75 * vh - r.top) / (r.height + 0.15 * vh)));
+      var p = clamp((0.75 * vh - r.top) / (r.height + 0.15 * vh), 0, 1);
       line.style.transform = "scaleY(" + p + ")";
+      nodes.forEach(function (n) { n.classList.toggle("lit", n.getBoundingClientRect().top < 0.75 * vh); });
     };
     var onScroll = function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -642,12 +782,18 @@ __PDF_SCRIPT__
   function initHero(root) {
     var host = $("[data-hero]", root);
     if (!host) return;
-    var images = HERO_SLUGS.map(function (slug) {
-      var src = getProjectImages(slug)[0], p = getProject(slug);
-      return src && p ? { src: src, alt: p.shortTitle } : null;
-    }).filter(Boolean);
+    var images = heroImageList();
     var overlay = $("[data-hero-overlay]", host), index = 0, current = null;
+    var count = $("[data-hero-count]", root), dots = $$("[data-hero-dots] .hero-dot", root);
 
+    function mark(i) {
+      if (count) count.setAttribute("data-n", "0" + (i + 1));
+      dots.forEach(function (d, k) {
+        d.classList.remove("on", "done");
+        if (k < i) d.classList.add("done");
+        if (k === i) { void d.offsetWidth; d.classList.add("on"); }
+      });
+    }
     function show(i, first) {
       var slide = document.createElement("div");
       slide.className = "hero-slide" + (first ? " on first" : "");
@@ -660,9 +806,10 @@ __PDF_SCRIPT__
         zoom.style.transform = getComputedStyle(zoom).transform; // freeze zoom while fading out
         old.classList.remove("on");
         old.classList.add("leaving");
-        setTimeout(function () { old.remove(); }, 1250);
+        setTimeout(function () { old.remove(); }, 1500);
       }
       current = slide;
+      mark(i);
     }
     show(0, true);
     if (images.length > 1 && !reduceMotion()) {
@@ -681,11 +828,11 @@ __PDF_SCRIPT__
       completed: all.filter(function (p) { return p.status === "completed"; }).length,
       ongoing: all.filter(function (p) { return p.status === "ongoing"; }).length
     };
-    var tabsEl = $("[data-pb-tabs]", host);
+    var tabsEl = $("[data-pb-tabs]", host), ind = $("[data-pb-ind]", host);
     var countEl = $("[data-pb-count]", host), panel = $("[data-pb-panel]", host);
 
-    var TAB_ON = "min-h-11 border-b-2 px-5 text-sm font-bold uppercase tracking-wider transition-colors border-gold text-brand";
-    var TAB_OFF = "min-h-11 border-b-2 px-5 text-sm font-bold uppercase tracking-wider transition-colors border-transparent text-muted-foreground hover:text-brand";
+    var TAB_ON = "relative min-h-12 px-5 text-sm font-bold uppercase tracking-wider transition-colors text-brand sm:px-7";
+    var TAB_OFF = "relative min-h-12 px-5 text-sm font-bold uppercase tracking-wider transition-colors text-muted-foreground hover:text-brand sm:px-7";
 
     function mkTab(id, label) {
       var b = document.createElement("button");
@@ -698,56 +845,73 @@ __PDF_SCRIPT__
     mkTab("completed", "Completed");
     mkTab("ongoing", "Ongoing");
 
+    function moveIndicator() {
+      var active = $("[aria-selected=true]", tabsEl);
+      if (!active) return;
+      ind.style.width = active.offsetWidth + "px";
+      ind.style.transform = "translateX(" + active.offsetLeft + "px)";
+    }
+    window.addEventListener("resize", moveIndicator);
+    cleanups.push(function () { window.removeEventListener("resize", moveIndicator); });
+
     var liCache = {};
     function liFor(p) {
       if (!liCache[p.slug]) {
         var li = document.createElement("li");
         li.innerHTML = projectCard(p);
+        bindPointer($("a", li));
+        li.setAttribute("data-r", "");
         liCache[p.slug] = li;
       }
       return liCache[p.slug];
     }
-    var ul = null;
+    var ul = null, revealIO = null;
 
     function update() {
-      var inTab = all.filter(function (p) { return p.status === status; });
-      var visible = inTab;
+      var visible = all.filter(function (p) { return p.status === status; });
 
       $$("[role=tab]", tabsEl).forEach(function (b) {
         var on = b.dataset.status === status;
         b.setAttribute("aria-selected", String(on));
         b.className = on ? TAB_ON : TAB_OFF;
       });
-      countEl.textContent = "Showing " + visible.length + " of " + inTab.length + " " + status + " projects";
+      moveIndicator();
+      countEl.textContent = "Showing " + visible.length + " of " + visible.length + " " + status + " projects";
       panel.setAttribute("aria-labelledby", "tab-" + status);
 
       // FLIP: remember where cards are, re-lay them out, then animate from old to new.
       var before = new Map();
       if (ul) $$("li", ul).forEach(function (li) { before.set(li, li.getBoundingClientRect()); });
 
-      if (visible.length === 0) {
-        panel.innerHTML = '<p class="border border-dashed border-border p-10 text-center text-muted-foreground">No projects match these filters.</p>';
-        ul = null;
-      } else {
-        if (!ul || !panel.contains(ul)) {
-          panel.innerHTML = "";
-          ul = document.createElement("ul");
-          ul.className = "grid gap-6 sm:grid-cols-2 lg:grid-cols-3";
-          panel.appendChild(ul);
-        }
-        ul.innerHTML = "";
-        visible.forEach(function (p) { ul.appendChild(liFor(p)); });
-        if (rendered && !reduceMotion()) {
-          $$("li", ul).forEach(function (li) {
-            var was = before.get(li);
-            if (!was) {
-              li.animate([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 250, easing: "ease-out" });
-            } else {
-              var now = li.getBoundingClientRect(), dx = was.left - now.left, dy = was.top - now.top;
-              if (dx || dy) li.animate([{ transform: "translate(" + dx + "px," + dy + "px)" }, { transform: "none" }], { duration: 250, easing: "ease-out" });
-            }
-          });
-        }
+      if (!ul || !panel.contains(ul)) {
+        panel.innerHTML = "";
+        ul = document.createElement("ul");
+        ul.className = "grid gap-7 sm:grid-cols-2 lg:grid-cols-3";
+        panel.appendChild(ul);
+      }
+      ul.innerHTML = "";
+      visible.forEach(function (p, i) {
+        var li = liFor(p);
+        if (!li.classList.contains("in")) li.style.setProperty("--d", ((i % 3) * 0.1).toFixed(2) + "s");
+        ul.appendChild(li);
+      });
+      // reveal cards as they scroll into view (cards already shown stay shown)
+      if (!revealIO) {
+        revealIO = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) { if (en.isIntersecting) { revealIO.unobserve(en.target); en.target.classList.add("in"); } });
+        }, { rootMargin: "0px 0px -6% 0px" });
+        cleanups.push(function () { revealIO.disconnect(); });
+      }
+      $$("li", ul).forEach(function (li) { if (!li.classList.contains("in")) revealIO.observe(li); });
+
+      if (rendered && !reduceMotion()) {
+        $$("li", ul).forEach(function (li) {
+          var was = before.get(li);
+          if (was) {
+            var now = li.getBoundingClientRect(), dx = was.left - now.left, dy = was.top - now.top;
+            if (dx || dy) li.animate([{ transform: "translate(" + dx + "px," + dy + "px)" }, { transform: "none" }], { duration: 350, easing: "ease-out" });
+          }
+        });
       }
       rendered = true;
     }
@@ -759,7 +923,7 @@ __PDF_SCRIPT__
   // Same rules as src/lib/enquiry-schema.ts (zod), with the same messages.
   var EMAIL_RE = /^(?!\.)(?!.*\.\.)([A-Za-z0-9_'+\-\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$/;
   var PHONE_RE = /^[+\d][\d\s-]{6,18}$/;
-  var FIELD = "mt-2 block min-h-11 w-full rounded-sm border border-input bg-surface px-3 py-2 text-base text-foreground placeholder:text-muted-foreground";
+  var FLD = "fld block w-full rounded-sm border border-input bg-white px-3.5 text-base text-foreground";
 
   function validateField(name, raw) {
     var v = String(raw == null ? "" : raw).trim();
@@ -797,15 +961,15 @@ __PDF_SCRIPT__
   function initForm(root) {
     var host = $("#enquiry-root", root);
     if (!host) return;
-    var submitted = false;
+    var submitted = false, shownAt = Date.now();
 
     function showSent(mailto) {
-      host.innerHTML = '<div role="status" class="border border-border bg-surface p-8">' + icon("circle-check", "h-8 w-8 text-brand") +
+      host.innerHTML = '<div role="status" class="py-4">' + '<span class="pop inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-brand-2 to-brand text-gold">' + icon("circle-check", "h-8 w-8") + "</span>" +
         (mailto
-          ? '<h3 class="mt-4 text-2xl font-bold text-brand-ink">Your email is ready to send.</h3>' +
+          ? '<h3 class="mt-6 text-2xl font-bold text-brand-ink">Your email is ready to send.</h3>' +
             '<p class="mt-2 text-muted-foreground">Your email app should have opened with your enquiry filled in. Press send there to complete it. If nothing opened, write to <a class="font-semibold text-brand underline underline-offset-4" href="mailto:' + company.emails.general + '">' + company.emails.general + "</a> or call " + esc(company.phones[0].label) + ".</p>" +
             '<button type="button" data-again-mail class="mr-6 mt-6 min-h-11 text-sm font-semibold text-brand underline underline-offset-4">Open email again</button>'
-          : '<h3 class="mt-4 text-2xl font-bold text-brand-ink">Thank you, we’ve received your enquiry.</h3><p class="mt-2 text-muted-foreground">Our team will get back to you shortly.</p>') +
+          : '<h3 class="mt-6 text-2xl font-bold text-brand-ink">Thank you, we’ve received your enquiry.</h3><p class="mt-2 text-muted-foreground">Our team will get back to you shortly.</p>') +
         '<button type="button" data-again class="mt-6 min-h-11 text-sm font-semibold text-brand underline underline-offset-4">Send another enquiry</button></div>';
       $("[data-again]", host).addEventListener("click", renderForm);
       var again = $("[data-again-mail]", host);
@@ -814,25 +978,22 @@ __PDF_SCRIPT__
 
     function renderForm() {
       submitted = false;
+      shownAt = Date.now();
       var err = '<div data-err="%"></div>';
-      host.innerHTML = '<form novalidate class="grid gap-6 sm:grid-cols-2" id="enquiry-form">' +
-        '<div><label for="name" class="text-sm font-semibold text-brand-ink">Name <span aria-hidden="true">*</span></label>' +
-        '<input id="name" name="name" autocomplete="name" class="' + FIELD + '">' + err.replace("%", "name") + "</div>" +
-        '<div><label for="email" class="text-sm font-semibold text-brand-ink">Email <span aria-hidden="true">*</span></label>' +
-        '<input id="email" name="email" type="email" autocomplete="email" class="' + FIELD + '">' + err.replace("%", "email") + "</div>" +
-        '<div><label for="phone" class="text-sm font-semibold text-brand-ink">Phone</label>' +
-        '<input id="phone" name="phone" type="tel" autocomplete="tel" class="' + FIELD + '">' + err.replace("%", "phone") + "</div>" +
-        '<div><label for="organisation" class="text-sm font-semibold text-brand-ink">Organisation</label>' +
-        '<input id="organisation" name="organisation" autocomplete="organization" class="' + FIELD + '"></div>' +
-        '<div class="sm:col-span-2"><label for="subject" class="text-sm font-semibold text-brand-ink">Subject</label>' +
-        '<select id="subject" name="subject" class="' + FIELD + '">' + SUBJECTS.map(function (s) { return "<option>" + esc(s) + "</option>"; }).join("") + "</select></div>" +
-        '<div class="sm:col-span-2"><label for="message" class="text-sm font-semibold text-brand-ink">Message <span aria-hidden="true">*</span></label>' +
-        '<textarea id="message" name="message" rows="6" class="' + FIELD + '"></textarea>' + err.replace("%", "message") + "</div>" +
+      host.innerHTML = '<form novalidate class="grid gap-5 sm:grid-cols-2" id="enquiry-form">' +
+        '<div class="fl"><input id="name" name="name" autocomplete="name" placeholder=" " class="' + FLD + '"><label for="name">Name <span aria-hidden="true">*</span></label>' + err.replace("%", "name") + "</div>" +
+        '<div class="fl"><input id="email" name="email" type="email" autocomplete="email" placeholder=" " class="' + FLD + '"><label for="email">Email <span aria-hidden="true">*</span></label>' + err.replace("%", "email") + "</div>" +
+        '<div class="fl"><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder=" " class="' + FLD + '"><label for="phone">Phone</label>' + err.replace("%", "phone") + "</div>" +
+        '<div class="fl"><input id="organisation" name="organisation" autocomplete="organization" placeholder=" " class="' + FLD + '"><label for="organisation">Organisation</label></div>' +
+        '<div class="sm:col-span-2"><label for="subject" class="text-xs font-bold uppercase tracking-[0.16em] text-brand-ink">Subject</label>' +
+        '<select id="subject" name="subject" class="' + FLD + ' mt-2 min-h-14 py-2">' + SUBJECTS.map(function (s) { return "<option>" + esc(s) + "</option>"; }).join("") + "</select></div>" +
+        '<div class="fl sm:col-span-2"><textarea id="message" name="message" rows="6" placeholder=" " class="' + FLD + '"></textarea><label for="message">Message <span aria-hidden="true">*</span></label>' + err.replace("%", "message") + "</div>" +
         '<div class="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>' +
         '<div class="sm:col-span-2"><div data-server-error></div>' +
-        '<button type="submit" class="' + BTN_BASE + " " + BTN.primary + '" id="enquiry-submit">Send enquiry</button></div></form>';
+        '<button type="submit" class="btn-lux btn-primary" id="enquiry-submit" data-magnetic>Send enquiry</button></div></form>';
 
       var form = $("#enquiry-form", host), submitBtn = $("#enquiry-submit", host);
+      bindMagnetic(submitBtn);
       var ORDER = ["name", "email", "phone", "message"];
 
       function setError(name, msg) {
@@ -875,7 +1036,9 @@ __PDF_SCRIPT__
           organisation: form.elements.organisation.value.trim(),
           subject: form.elements.subject.value,
           message: form.elements.message.value.trim(),
-          website: ""
+          website: "",
+          source: "Website enquiry form",
+          elapsed: Date.now() - shownAt
         };
         var serverSlot = $("[data-server-error]", form);
         serverSlot.innerHTML = "";
@@ -894,10 +1057,11 @@ __PDF_SCRIPT__
           submitBtn.disabled = false;
           submitBtn.textContent = "Send enquiry";
         };
-        fetch(ENQUIRY_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(values) })
+        // text/plain keeps this a "simple" request, so Google Apps Script needs no CORS preflight.
+        fetch(ENQUIRY_ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(values) })
           .then(function (res) {
             return res.json().catch(function () { return {}; }).then(function (json) {
-              if (!res.ok) return fail(json.error || "Something went wrong. Please try again.");
+              if (!res.ok || json.error || json.ok === false) return fail(json.error || "Something went wrong. Please try again.");
               showSent(null);
             });
           })
@@ -906,6 +1070,79 @@ __PDF_SCRIPT__
     }
     renderForm();
   }
+
+  /* ---------------------- global scroll / cursor / smooth ------------ */
+  var lastY = 0, scrollTicking = false;
+  function onScrollFrame() {
+    scrollTicking = false;
+    var y = window.scrollY, h = document.documentElement.scrollHeight - window.innerHeight;
+    $("#progress").style.setProperty("--p", h > 0 ? (y / h).toFixed(4) : 0);
+    var hdr = $("#hdr");
+    hdr.classList.toggle("scrolled", y > 30);
+    if (!menuOpen) {
+      if (y > lastY + 4 && y > 260) hdr.classList.add("hide");
+      else if (y < lastY - 4 || y < 260) hdr.classList.remove("hide");
+    }
+    lastY = y;
+    parallaxTick();
+  }
+  window.addEventListener("scroll", function () {
+    if (!scrollTicking) { scrollTicking = true; requestAnimationFrame(onScrollFrame); }
+  }, { passive: true });
+  window.addEventListener("resize", onScrollFrame);
+
+  // Inertia ("lerp") scrolling for mouse wheels; native scrolling everywhere else.
+  var smooth = { sync: function () {} };
+  (function () {
+    if (!FINE || reduceMotion()) return;
+    var target = window.scrollY, current = window.scrollY, active = false, lastSet = window.scrollY, lastT = 0;
+    var maxY = function () { return document.documentElement.scrollHeight - window.innerHeight; };
+    function tick(now) {
+      var dt = Math.min(64, now - lastT || 16.7);
+      lastT = now;
+      // time-based easing: same feel at 30, 60 or 144 fps
+      current += (target - current) * (1 - Math.pow(0.9, dt / 16.7));
+      if (Math.abs(target - current) < 0.3) { current = target; active = false; }
+      lastSet = current;
+      window.scrollTo(0, current);
+      if (active) requestAnimationFrame(tick);
+    }
+    window.addEventListener("wheel", function (e) {
+      if (e.ctrlKey || menuOpen || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      for (var el = e.target; el && el !== document.body; el = el.parentElement) {
+        var s = getComputedStyle(el);
+        if (/(auto|scroll)/.test(s.overflowY) && el.scrollHeight > el.clientHeight + 1) return; // let inner scrollers scroll
+      }
+      e.preventDefault();
+      if (!active) { current = window.scrollY; target = current; }
+      target = clamp(target + e.deltaY * (e.deltaMode === 1 ? 34 : 1), 0, maxY());
+      if (!active) { active = true; lastT = performance.now(); requestAnimationFrame(tick); }
+    }, { passive: false });
+    // Any scroll we did not cause (keyboard, scrollbar drag, anchor, scrollIntoView) takes over from the inertia.
+    window.addEventListener("scroll", function () {
+      if (!active || Math.abs(window.scrollY - lastSet) > 2) { active = false; current = target = lastSet = window.scrollY; }
+    }, { passive: true });
+    smooth.sync = function () { current = target = lastSet = window.scrollY; active = false; };
+  })();
+
+  // Cursor follower (desktop pointers only).
+  (function () {
+    if (!FINE || reduceMotion()) return;
+    var dot = $("#cur-dot"), ring = $("#cur-ring"), x = 0, y = 0, rx = 0, ry = 0, running = false;
+    function loop() {
+      rx += (x - rx) * 0.18; ry += (y - ry) * 0.18;
+      ring.style.transform = "translate3d(" + rx + "px," + ry + "px,0)";
+      if (Math.abs(x - rx) > 0.2 || Math.abs(y - ry) > 0.2) requestAnimationFrame(loop); else running = false;
+    }
+    window.addEventListener("pointermove", function (e) {
+      x = e.clientX; y = e.clientY;
+      dot.style.transform = "translate3d(" + x + "px," + y + "px,0)";
+      document.documentElement.classList.add("has-cursor");
+      ring.classList.toggle("hov", !!(e.target.closest && e.target.closest("a, button, [data-tilt], select, input, textarea, label")));
+      if (!running) { running = true; requestAnimationFrame(loop); }
+    }, { passive: true });
+    document.addEventListener("pointerleave", function () { document.documentElement.classList.remove("has-cursor"); });
+  })();
 
   /* ============================ ROUTER ============================= */
 
@@ -958,9 +1195,33 @@ __PDF_SCRIPT__
     setMeta(title, desc);
     renderNav(path);
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    smooth.sync();
+    lastY = 0;
+    $("#hdr").classList.remove("hide");
+    onScrollFrame();
 
-    initHero(main); initReveal(main); initCountUp(main); initBars(main);
+    initFx(main); initHero(main); initCountUp(main); initBars(main);
     initTimeline(main); initBrowser(main); initForm(main);
+  }
+
+  // Page transitions: a gold-edged curtain sweeps up, the page swaps underneath, then it lifts away.
+  var navBusy = false, navQueued = false, started = false;
+  function go() {
+    if (!started) return;
+    if (reduceMotion()) { route(); return; }
+    if (navBusy) { navQueued = true; return; }
+    navBusy = true;
+    var c = $("#curtain");
+    c.className = "curtain cover";
+    setTimeout(function () {
+      route();
+      c.className = "curtain reveal";
+      setTimeout(function () {
+        c.className = "curtain";
+        navBusy = false;
+        if (navQueued) { navQueued = false; go(); }
+      }, 620);
+    }, 470);
   }
 
   /* ============================== BOOT ============================= */
@@ -993,8 +1254,25 @@ __PDF_SCRIPT__
     setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
   });
 
-  window.addEventListener("hashchange", route);
-  route();
+  window.addEventListener("hashchange", go);
+
+  // Preloader (first visit of the session only), then the first route renders underneath it.
+  var seen = false;
+  try { seen = sessionStorage.getItem("kb-seen") === "1"; } catch (e) {}
+  if (seen || reduceMotion()) {
+    started = true;
+    route();
+  } else {
+    var pl = document.createElement("div");
+    pl.className = "preloader";
+    pl.setAttribute("aria-hidden", "true");
+    pl.innerHTML = logoMark("light", "pl-mark") + '<div class="pl-line"></div>';
+    document.body.appendChild(pl);
+    setTimeout(function () { started = true; route(); }, 1100);
+    setTimeout(function () { pl.classList.add("done"); }, 1250);
+    setTimeout(function () { pl.remove(); }, 2200);
+    try { sessionStorage.setItem("kb-seen", "1"); } catch (e) {}
+  }
 })();
 </script>
 </body>
