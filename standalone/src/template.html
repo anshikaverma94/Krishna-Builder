@@ -926,6 +926,9 @@ __PDF_SCRIPT__
   }
 
   /* ---------------------------- project browser ---------------------- */
+  // Delhi + the NCR towns where we work (Gurugram, Palwal, Sonipat/Kundli, Ghaziabad, Noida, Faridabad)
+  var NCR_RE = /\b(delhi|gurugram|gurgaon|palwal|sonipat|kundli|ghaziabad|noida|faridabad)\b/i;
+  function inNCR(p) { return p.state === "Delhi" || NCR_RE.test(p.location) || NCR_RE.test(p.title); }
   function initBrowser(root) {
     var host = $("[data-browser]", root);
     if (!host) return;
@@ -975,7 +978,9 @@ __PDF_SCRIPT__
     var ul = null, revealIO = null;
 
     function update() {
-      var visible = all.filter(function (p) { return p.status === status; });
+      // NCR projects are listed first (the sort is stable, so each group keeps its original order)
+      var visible = all.filter(function (p) { return p.status === status; })
+        .sort(function (x, y) { return (inNCR(y) ? 1 : 0) - (inNCR(x) ? 1 : 0); });
 
       $$("[role=tab]", tabsEl).forEach(function (b) {
         var on = b.dataset.status === status;
