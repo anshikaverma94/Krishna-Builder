@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 import type { Project } from "@/content/projects";
-import { formatCrore, yearOf } from "@/lib/format";
+import { yearOf } from "@/lib/format";
 import { ProjectImage } from "./ProjectImage";
 
 export type ProjectCardData = Project & { image?: string };
@@ -48,7 +48,14 @@ export function ProjectCard({ project }: { project: ProjectCardData }) {
           {project.location}
         </p>
         <div className="mt-4 flex items-center justify-between border-t border-border pt-4 text-sm">
-          <span className="font-semibold text-brand-ink">{formatCrore(project.valueLakhs)}</span>
+          {/* Visual button only: the whole card is already the link. */}
+          <span className="inline-flex items-center gap-1.5 rounded-sm border border-brand px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand transition-colors group-hover:bg-brand group-hover:text-brand-foreground">
+            View details
+            <ArrowRight
+              className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+              aria-hidden
+            />
+          </span>
           {year && <span className="text-muted-foreground">{year}</span>}
         </div>
       </div>
