@@ -446,10 +446,10 @@ var ICONS={"arrow-right":"\u003cpath d=\"M5 12h14\" />\n  \u003cpath d=\"m12 5 7
   }
 
   function turnoverChart() {
-    var MAX = 35000, ticks = [0, 10000, 20000, 30000];
+    var MAX = 350, ticks = [0, 100, 200, 300]; // INR crores (1 Cr = 100 Lakhs)
     var nf = inr;
-    var label = "Bar chart of annual turnover in INR lakhs: " + financials.map(function (f) {
-      return f.year + " " + nf.format(f.lakhs) + (f.projected ? " (projected)" : "");
+    var label = "Bar chart of annual turnover in INR crores: " + financials.map(function (f) {
+      return f.year + " " + nf.format(f.lakhs / 100) + (f.projected ? " (projected)" : "");
     }).join(", ") + ".";
     return "<figure>" +
       '<div role="img" aria-label="' + esc(label) + '" class="relative">' +
@@ -461,16 +461,16 @@ var ICONS={"arrow-right":"\u003cpath d=\"M5 12h14\" />\n  \u003cpath d=\"m12 5 7
       '<div class="absolute inset-0 flex items-end justify-around gap-3 px-2 sm:gap-8">' +
       financials.map(function (f, i) {
         return '<div class="relative flex h-full flex-1 flex-col justify-end">' +
-          '<div data-bar="' + (f.lakhs / MAX) * 100 + '%" style="--d:' + i * 0.12 + 's" class="bar relative w-full ' +
+          '<div data-bar="' + (f.lakhs / 100 / MAX) * 100 + '%" style="--d:' + i * 0.12 + 's" class="bar relative w-full ' +
           (f.projected ? "border-2 border-dashed border-brand bg-[repeating-linear-gradient(45deg,#e9dff3,#e9dff3_6px,#ffffff_6px,#ffffff_12px)]" : "bar-fill") + '">' +
-          '<span class="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-bold text-brand-ink sm:text-sm">' + nf.format(f.lakhs) + "</span></div></div>";
+          '<span class="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-bold text-brand-ink sm:text-sm">' + nf.format(f.lakhs / 100) + "</span></div></div>";
       }).join("") + "</div></div>" +
       '<div class="ml-14 mt-3 flex justify-around gap-3 px-2 sm:gap-8">' +
       financials.map(function (f) {
         return '<div class="flex-1 text-center"><p class="text-xs font-semibold text-brand-ink sm:text-sm">' + f.year + "</p>" +
           (f.projected ? '<p class="mt-0.5 text-[11px] font-bold uppercase tracking-wider text-gold-deep">Projected</p>' : "") + "</div>";
       }).join("") + "</div></div>" +
-      '<figcaption class="mt-8 text-sm text-muted-foreground">Annual turnover, figures in INR Lakhs. 2026-27 is a projection.</figcaption></figure>';
+      '<figcaption class="mt-8 text-sm text-muted-foreground">Annual turnover, figures in INR Crores. 2026-27 is a projection.</figcaption></figure>';
   }
 
   function pageCapabilities() {
@@ -478,7 +478,7 @@ var ICONS={"arrow-right":"\u003cpath d=\"M5 12h14\" />\n  \u003cpath d=\"m12 5 7
     return pageHero({ idx: "04", photo: "science-academy-jajpur", eyebrow: "Capabilities", title: "The people, plant and track record behind every project", intro: DATA.workforceNote,
         extra: '<div aria-label="Team strength" role="group">' + statGrid(teamStats, true) + "</div>" }) +
       '<section class="relative overflow-hidden py-24 sm:py-36">' + container("grid gap-14 lg:grid-cols-12 lg:gap-16",
-        '<div class="lg:col-span-4">' + sectionHeading({ eyebrow: "Financial performance", title: "Steady growth in turnover", intro: "Annual turnover in INR Lakhs, as stated in our business profile." }) + "</div>" +
+        '<div class="lg:col-span-4">' + sectionHeading({ eyebrow: "Financial performance", title: "Steady growth in turnover", intro: "Annual turnover in INR Crores, as stated in our business profile." }) + "</div>" +
         reveal("card-lux p-6 pt-12 sm:p-10 sm:pt-14 lg:col-span-8", turnoverChart())) + "</section>" +
       '<section class="relative overflow-hidden bg-muted py-24 sm:py-36">' + container("",
         sectionHeading({ eyebrow: "Plant & machinery", title: "Equipment owned and deployed on our sites" }) +
